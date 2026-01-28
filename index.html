@@ -23,15 +23,9 @@
     <div class="top-nav">
       <div class="scale-control">
         <span>페이지 축소</span>
-        <input
-          type="range"
-          min="0.5"
-          max="1"
-          step="0.01"
-          value="1"
-          oninput="updateScale(this.value)"
-        />
+        <button class="scale-btn" onclick="adjustScale(-0.1)">-</button>
         <span id="scale-val">100%</span>
+        <button class="scale-btn" onclick="adjustScale(0.1)">+</button>
       </div>
       <button class="export-btn" onclick="saveAsImage()">📥 Export PNG</button>
     </div>
@@ -174,6 +168,12 @@
                 style="background: #dac6c6"
                 onclick="pickColor('c-a-3')"
               ></div>
+              <div
+                class="color-dot"
+                id="c-a-4"
+                style="background: #2383e2"
+                onclick="pickColor('c-a-4')"
+              ></div>
             </div>
           </div>
 
@@ -230,6 +230,12 @@
                 id="c-b-3"
                 style="background: #eee"
                 onclick="pickColor('c-b-3')"
+              ></div>
+              <div
+                class="color-dot"
+                id="c-b-4"
+                style="background: #dac6c6"
+                onclick="pickColor('c-b-4')"
               ></div>
             </div>
           </div>
@@ -291,7 +297,6 @@
             </div>
           </div>
         </div>
-
         <div class="copyright-container">
           <span class="copyright-text" contenteditable="true"
             >© 2026 TRPGSEUL All rights reserved.</span
@@ -300,33 +305,44 @@
       </div>
     </div>
     <div id="crop-modal">
-      <div class="modal-inner">
-        <div class="crop-container">
+      <div class="modal-content">
+        <div class="modal-title">이미지 편집</div>
+        <div class="crop-area">
           <img id="crop-target" />
         </div>
         <div class="modal-btns">
-          <button onclick="applyCrop()" class="apply-btn">적용하기</button>
-          <button onclick="closeModal()" class="cancel-btn">취소</button>
+          <button onclick="applyCrop()" class="m-btn save">적용하기</button>
+          <button onclick="closeModal()" class="m-btn">취소</button>
         </div>
       </div>
     </div>
 
     <div id="color-popup">
+      <div class="popup-header">Color Palette</div>
       <div class="color-grid">
         <div onclick="selectColor('#ff0000')" style="background: #ff0000"></div>
         <div onclick="selectColor('#00ff00')" style="background: #00ff00"></div>
         <div onclick="selectColor('#0000ff')" style="background: #0000ff"></div>
         <div
           onclick="selectColor('#ffffff')"
-          style="background: #ffffff; border: 1px solid #ddd"
+          style="background: #ffffff; border: 1px solid #eee"
         ></div>
         <div onclick="selectColor('#000000')" style="background: #000000"></div>
         <div onclick="selectColor('#ffd700')" style="background: #ffd700"></div>
+        <div onclick="selectColor('#b19cd9')" style="background: #b19cd9"></div>
+        <div onclick="selectColor('#6b6b6b')" style="background: #6b6b6b"></div>
       </div>
       <button class="sys-picker-btn" onclick="openSystemPicker()">
         직접 선택
       </button>
     </div>
+
+    <input
+      type="color"
+      id="hidden-picker"
+      style="display: none"
+      onchange="selectColor(this.value)"
+    />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>

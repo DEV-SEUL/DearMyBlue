@@ -1,36 +1,42 @@
 // ==========================================
-// 전역 변수
+// 1. 전역 변수 설정
 // ==========================================
 let cropper = null;
 let targetId = "";
 let activeDotId = "";
+let currentScale = 1.0; // 기본 배율 100%
 
 // ==========================================
-// 시트 전체 축소/확대 (Scale) 로직 - 추가됨
+// 2. 페이지 축소/확대 (Button 방식)
 // ==========================================
-function updateScale(value) {
+function adjustScale(amount) {
+  // 최소 0.5(50%) ~ 최대 1.0(100%) 범위 제한
+  currentScale = Math.min(1.0, Math.max(0.5, currentScale + amount));
+  updateDisplay();
+}
+
+function updateDisplay() {
   const area = document.getElementById("capture-area");
-  if (!area) return;
+  const valText = document.getElementById("scale-val");
+  if (!area || !valText) return;
 
-  // 슬라이더 값(0.5 ~ 1.0)에 따라 크기 조절
-  area.style.transform = `scale(${value})`;
+  // 화면 배율 적용 (상단 중앙 기준)
+  area.style.transform = `scale(${currentScale})`;
   area.style.transformOrigin = "top center";
 
-  // 축소 시 아래쪽 여백이 남는 문제 해결 (부모 요소 높이 조정)
+  // 배율 텍스트 업데이트
+  const displayVal = Math.round(currentScale * 100);
+  valText.innerText = `${displayVal}%`;
+
+  // 축소 시 발생하는 하단 빈 공간 방지 (부모 컨테이너 높이 보정)
   const wrapper = area.parentElement;
   if (wrapper) {
-    wrapper.style.height = area.offsetHeight * value + "px";
-  }
-
-  // 현재 배율 표시 (HTML에 scale-val 아이디를 가진 요소 필요)
-  const scaleDisplay = document.getElementById("scale-val");
-  if (scaleDisplay) {
-    scaleDisplay.innerText = Math.floor(value * 100) + "%";
+    wrapper.style.height = area.offsetHeight * currentScale + "px";
   }
 }
 
 // ==========================================
-// 파일 선택 및 이미지 편집 (Cropper)
+// 3. 이미지 편집 및 크롭 (Cropper.js)
 // ==========================================
 function triggerFile(id) {
   const el = document.getElementById(id);
@@ -47,12 +53,7 @@ function openEditor(input, imgId, ratio) {
     const modal = document.getElementById("crop-modal");
     const targetImg = document.getElementById("crop-target");
 
-    if (!modal || !targetImg) {
-      alert(
-        "모달 구조를 찾을 수 없습니다. HTML에 crop-modal과 crop-target이 있는지 확인하세요.",
-      );
-      return;
-    }
+    if (!modal || !targetImg) return;
 
     targetImg.src = e.target.result;
     modal.style.display = "flex";
@@ -69,7 +70,7 @@ function openEditor(input, imgId, ratio) {
   };
 
   reader.readAsDataURL(input.files[0]);
-  input.value = "";
+  input.value = ""; // 동일 파일 재선택 가능하도록 초기화
 }
 
 function applyCrop() {
@@ -81,15 +82,10 @@ function applyCrop() {
   if (resultImg) {
     const box = resultImg.parentElement;
     resultImg.src = canvas.toDataURL("image/png");
-
     resultImg.style.display = "block";
-    box.classList.add("has-img");
 
     const plusIcon = box.querySelector(".plus-icon, .small-box-label");
-    const delBtn = box.querySelector(".del-btn");
-
-    if (plusIcon) plusIcon.style.display = "none";
-    if (delBtn) delBtn.style.display = "flex";
+    if (plusIcon) plusIcon.style.opacity = "0"; // 아이콘 숨김
   }
 
   closeModal();
@@ -111,14 +107,10 @@ function resetImg(event, imgId) {
 
   const box = resultImg.parentElement;
   const plusIcon = box.querySelector(".plus-icon, .small-box-label");
-  const delBtn = box.querySelector(".del-btn");
 
   resultImg.src = "";
   resultImg.style.display = "none";
-  box.classList.remove("has-img");
-
-  if (plusIcon) plusIcon.style.display = "block";
-  if (delBtn) delBtn.style.display = "none";
+  if (plusIcon) plusIcon.style.opacity = "1";
 
   const fileInput = document.getElementById(
     "file-" + imgId.replace("img-", ""),
@@ -127,7 +119,7 @@ function resetImg(event, imgId) {
 }
 
 // ==========================================
-// 리스트 아이템 추가
+// 4. 리스트 제어
 // ==========================================
 function addItem(listId) {
   const list = document.getElementById(listId);
@@ -141,12 +133,11 @@ function addItem(listId) {
       <button class="list-btn" onclick="this.parentElement.parentElement.remove()">−</button>
     </div>
   `;
-
   list.appendChild(div);
 }
 
 // ==========================================
-// 컬러 피커 로직
+// 5. 컬러 피커 로직
 // ==========================================
 function pickColor(id) {
   const dot = document.getElementById(id);
@@ -154,11 +145,11 @@ function pickColor(id) {
   if (!dot || !popup) return;
 
   activeDotId = id;
-
   const rect = dot.getBoundingClientRect();
+
   popup.style.display = "block";
-  popup.style.top = window.scrollY + rect.bottom + 10 + "px";
-  popup.style.left = window.scrollX + rect.left - 70 + "px";
+  popup.style.top = window.scrollY + rect.bottom + 8 + "px";
+  popup.style.left = window.scrollX + rect.left - 80 + "px";
 
   const closePopup = (e) => {
     if (!popup.contains(e.target) && e.target !== dot) {
@@ -179,14 +170,13 @@ function selectColor(color) {
 }
 
 function openSystemPicker() {
-  const colorInput = document.createElement("input");
-  colorInput.type = "color";
+  const hiddenPicker = document.getElementById("hidden-picker");
   const currentDot = document.getElementById(activeDotId);
+
   if (currentDot) {
-    colorInput.value = rgbToHex(currentDot.style.background) || "#000000";
+    hiddenPicker.value = rgbToHex(currentDot.style.background) || "#000000";
   }
-  colorInput.oninput = (e) => selectColor(e.target.value);
-  colorInput.click();
+  hiddenPicker.click();
 }
 
 function rgbToHex(rgb) {
@@ -198,47 +188,50 @@ function rgbToHex(rgb) {
 }
 
 // ==========================================
-// 이미지로 저장 (PNG Export) - 축소 보정 기능 통합
+// 6. 이미지 저장 (PNG Export)
 // ==========================================
 function saveAsImage() {
   const area = document.getElementById("capture-area");
   if (!area) return;
 
-  const originalTransform = area.style.transform; // 현재 적용된 축소 배율 보관
-  area.style.transform = "scale(1)"; // 저장 시에는 100% 비율로 복구
+  // 1. 현재 배율 임시 해제 (100%로 캡처해야 고화질)
+  const originalTransform = area.style.transform;
+  const originalHeight = area.parentElement.style.height;
 
-  const titleEl = document.querySelector(".pair-title");
-  const title = titleEl ? titleEl.innerText : "Untitled";
+  area.style.transform = "scale(1)";
+  area.parentElement.style.height = "auto";
 
-  // 캡처 시 불필요한 UI 숨기기
-  const allBtns = document.querySelectorAll(
-    ".btn-group, .del-btn, .export-btn, .color-popup, .list-btn, .scale-control",
+  // 2. 불필요한 UI 요소 숨기기
+  const hideTargets = document.querySelectorAll(
+    ".btn-group, .del-btn, .top-nav, #color-popup",
   );
-  allBtns.forEach((btn) => (btn.style.opacity = "0"));
+  hideTargets.forEach((el) => (el.style.visibility = "hidden"));
 
   window.scrollTo(0, 0);
 
   setTimeout(() => {
     html2canvas(area, {
       backgroundColor: "#ffffff",
-      scale: 2, // 저장 화질 보정
+      scale: 2, // 2배 선명하게 저장
       useCORS: true,
       logging: false,
     }).then((canvas) => {
+      const title = document.querySelector(".pair-title").innerText.trim();
       const link = document.createElement("a");
-      link.download = `${title}_profile.png`;
+      link.download = `${title || "profile"}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
 
-      // UI 복구 및 축소 배율 복구
-      allBtns.forEach((btn) => (btn.style.opacity = "1"));
+      // 3. UI 및 배율 복구
+      hideTargets.forEach((el) => (el.style.visibility = "visible"));
       area.style.transform = originalTransform;
+      area.parentElement.style.height = originalHeight;
     });
-  }, 400);
+  }, 300);
 }
 
 // ==========================================
-// 붙여넣기 서식 제거
+// 7. 유틸리티 (붙여넣기 서식 제거)
 // ==========================================
 document.addEventListener("paste", function (e) {
   if (e.target.isContentEditable) {
