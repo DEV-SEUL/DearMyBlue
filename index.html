@@ -4,20 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile Maker</title>
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile Maker</title>
-    
-    <link href="https://webfontworld.github.io/gmarket/GmarketSans.css" rel="stylesheet" />
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
-
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet" />
-    
+    <link
+      href="https://webfontworld.github.io/gmarket/GmarketSans.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
-</head>
-
+  </head>
   <body>
     <div class="top-nav">
       <button class="export-btn" onclick="saveAsImage()">📥 Export PNG</button>
@@ -147,9 +147,9 @@
             ></div>
             <div
               class="color-dot"
-              id="c-a-2"
+              id="c-a-3"
               style="background: #dac6c6"
-              onclick="pickColor('c-a-2')"
+              onclick="pickColor('c-a-3')"
             ></div>
           </div>
         </div>
@@ -201,9 +201,9 @@
             ></div>
             <div
               class="color-dot"
-              id="c-a-2"
+              id="c-b-3"
               style="background: #eee"
-              onclick="pickColor('c-a-2')"
+              onclick="pickColor('c-b-3')"
             ></div>
           </div>
         </div>
@@ -261,14 +261,129 @@
       </div>
 
       <div class="copyright-container">
-        <span class="copyright-text" contenteditable="true">
-          © 2026 TRPGSEUL All rights reserved. (필요 시 추가)
-        </span>
+        <span class="copyright-text" contenteditable="true"
+          >© 2026 TRPGSEUL All rights reserved.</span
+        >
       </div>
     </div>
 
-    <div id="crop-modal">...</div>
-    <div id="color-popup">...</div>
+    <div
+      id="crop-modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      "
+    >
+      <div
+        style="max-width: 80%; max-height: 70%; background: #fff; padding: 10px"
+      >
+        <img id="crop-target" style="max-width: 100%" />
+      </div>
+      <div style="margin-top: 20px">
+        <button
+          onclick="applyCrop()"
+          style="padding: 10px 20px; cursor: pointer"
+        >
+          적용하기
+        </button>
+        <button
+          onclick="closeModal()"
+          style="padding: 10px 20px; cursor: pointer; margin-left: 10px"
+        >
+          취소
+        </button>
+      </div>
+    </div>
+
+    <div
+      id="color-popup"
+      style="
+        display: none;
+        position: absolute;
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        z-index: 900;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 5px;
+          margin-bottom: 10px;
+        "
+      >
+        <div
+          onclick="selectColor('#ff0000')"
+          style="
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            cursor: pointer;
+          "
+        ></div>
+        <div
+          onclick="selectColor('#00ff00')"
+          style="
+            width: 20px;
+            height: 20px;
+            background: #00ff00;
+            cursor: pointer;
+          "
+        ></div>
+        <div
+          onclick="selectColor('#0000ff')"
+          style="
+            width: 20px;
+            height: 20px;
+            background: #0000ff;
+            cursor: pointer;
+          "
+        ></div>
+        <div
+          onclick="selectColor('#ffffff')"
+          style="
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+          "
+        ></div>
+        <div
+          onclick="selectColor('#000000')"
+          style="
+            width: 20px;
+            height: 20px;
+            background: #000000;
+            cursor: pointer;
+          "
+        ></div>
+        <div
+          onclick="selectColor('#ffd700')"
+          style="
+            width: 20px;
+            height: 20px;
+            background: #ffd700;
+            cursor: pointer;
+          "
+        ></div>
+      </div>
+      <button onclick="openSystemPicker()" style="width: 100%; font-size: 12px">
+        직접 선택
+      </button>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>

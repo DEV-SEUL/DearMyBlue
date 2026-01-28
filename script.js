@@ -3,13 +3,14 @@
 // ==========================================
 let cropper = null;
 let targetId = "";
-let activeDotId = ""; // 현재 색상을 변경 중인 도트 ID
+let activeDotId = "";
 
 // ==========================================
 // 파일 선택 및 이미지 편집 (Cropper)
 // ==========================================
 function triggerFile(id) {
-  document.getElementById(id).click();
+  const el = document.getElementById(id);
+  if (el) el.click();
 }
 
 function openEditor(input, imgId, ratio) {
@@ -22,20 +23,30 @@ function openEditor(input, imgId, ratio) {
     const modal = document.getElementById("crop-modal");
     const targetImg = document.getElementById("crop-target");
 
+    if (!modal || !targetImg) {
+      alert(
+        "모달 구조를 찾을 수 없습니다. HTML에 crop-modal과 crop-target이 있는지 확인하세요.",
+      );
+      return;
+    }
+
     targetImg.src = e.target.result;
     modal.style.display = "flex";
 
     if (cropper) cropper.destroy();
 
+    // Cropper.js 초기화
     cropper = new Cropper(targetImg, {
       aspectRatio: ratio,
       viewMode: 1,
       autoCropArea: 1,
       dragMode: "move",
+      background: false, // 바둑판 배경 끄기 (취향껏)
     });
   };
 
   reader.readAsDataURL(input.files[0]);
+  // 동일한 파일을 다시 선택해도 작동하도록 input 값 초기화
   input.value = "";
 }
 
@@ -44,25 +55,41 @@ function applyCrop() {
 
   const canvas = cropper.getCroppedCanvas();
   const resultImg = document.getElementById(targetId);
-  const box = resultImg.parentElement;
 
-  resultImg.src = canvas.toDataURL();
-  resultImg.style.display = "block";
-  box.classList.add("has-img");
+  if (resultImg) {
+    const box = resultImg.parentElement;
+    resultImg.src = canvas.toDataURL("image/png");
 
-  const plusIcon = box.querySelector(".plus-icon, .small-box-label");
-  const delBtn = box.querySelector(".del-btn");
+    // 이미지 표시 처리
+    resultImg.style.display = "block";
+    box.classList.add("has-img");
 
-  if (plusIcon) plusIcon.style.display = "none";
-  if (delBtn) delBtn.style.display = "flex";
+    // UI 요소 제어 (아이콘 숨기고 삭제버튼 보이기)
+    const plusIcon = box.querySelector(".plus-icon, .small-box-label");
+    const delBtn = box.querySelector(".del-btn");
+
+    if (plusIcon) plusIcon.style.display = "none";
+    if (delBtn) delBtn.style.display = "flex";
+  }
 
   closeModal();
+}
+
+function closeModal() {
+  const modal = document.getElementById("crop-modal");
+  if (modal) modal.style.display = "none";
+  if (cropper) {
+    cropper.destroy();
+    cropper = null;
+  }
 }
 
 function resetImg(event, imgId) {
   event.stopPropagation();
 
   const resultImg = document.getElementById(imgId);
+  if (!resultImg) return;
+
   const box = resultImg.parentElement;
   const plusIcon = box.querySelector(".plus-icon, .small-box-label");
   const delBtn = box.querySelector(".del-btn");
@@ -74,21 +101,15 @@ function resetImg(event, imgId) {
   if (plusIcon) plusIcon.style.display = "block";
   if (delBtn) delBtn.style.display = "none";
 
-  const inputId = "file-" + imgId.replace("img-", "");
-  const fileInput = document.getElementById(inputId);
+  // 파일 인풋 초기화
+  const fileInput = document.getElementById(
+    "file-" + imgId.replace("img-", ""),
+  );
   if (fileInput) fileInput.value = "";
 }
 
-function closeModal() {
-  document.getElementById("crop-modal").style.display = "none";
-  if (cropper) {
-    cropper.destroy();
-    cropper = null;
-  }
-}
-
 // ==========================================
-// 리스트 아이템 추가 (개선된 디자인 반영)
+// 리스트 아이템 추가
 // ==========================================
 function addItem(listId) {
   const list = document.getElementById(listId);
@@ -107,20 +128,20 @@ function addItem(listId) {
 }
 
 // ==========================================
-// 커스텀 컬러 피커 로직 (리디자인)
+// 컬러 피커 로직
 // ==========================================
 function pickColor(id) {
   const dot = document.getElementById(id);
   const popup = document.getElementById("color-popup");
+  if (!dot || !popup) return;
+
   activeDotId = id;
 
-  // 팝업 위치 설정 (클릭한 도트 근처)
   const rect = dot.getBoundingClientRect();
   popup.style.display = "block";
   popup.style.top = window.scrollY + rect.bottom + 10 + "px";
   popup.style.left = window.scrollX + rect.left - 70 + "px";
 
-  // 팝업 외부 클릭 시 닫기
   const closePopup = (e) => {
     if (!popup.contains(e.target) && e.target !== dot) {
       popup.style.display = "none";
@@ -130,42 +151,32 @@ function pickColor(id) {
   document.addEventListener("mousedown", closePopup);
 }
 
-// 팝업 내 사전 정의된 색상 선택
 function selectColor(color) {
   if (activeDotId) {
     const targetDot = document.getElementById(activeDotId);
-    targetDot.style.background = color;
-    document.getElementById("color-popup").style.display = "none";
+    if (targetDot) targetDot.style.background = color;
+    const popup = document.getElementById("color-popup");
+    if (popup) popup.style.display = "none";
   }
 }
 
-// 직접 선택 버튼 (시스템 컬러 피커 호출)
 function openSystemPicker() {
   const colorInput = document.createElement("input");
   colorInput.type = "color";
   const currentDot = document.getElementById(activeDotId);
+  if (currentDot) {
+    colorInput.value = rgbToHex(currentDot.style.background) || "#000000";
+  }
 
-  // 현재 색상을 피커 기본값으로 (RGB -> HEX 변환)
-  colorInput.value = rgbToHex(currentDot.style.background) || "#000000";
-
-  colorInput.oninput = (e) => {
-    selectColor(e.target.value);
-  };
+  colorInput.oninput = (e) => selectColor(e.target.value);
   colorInput.click();
 }
 
-// RGB(0,0,0) 스타일 문자열을 HEX(#000000)로 변환
 function rgbToHex(rgb) {
   if (!rgb || !rgb.startsWith("rgb")) return rgb;
   const vals = rgb.match(/\d+/g);
   return (
-    "#" +
-    vals
-      .map((x) => {
-        const hex = parseInt(x).toString(16);
-        return hex.length === 1 ? "0" + hex : hex;
-      })
-      .join("")
+    "#" + vals.map((x) => parseInt(x).toString(16).padStart(2, "0")).join("")
   );
 }
 
@@ -174,12 +185,12 @@ function rgbToHex(rgb) {
 // ==========================================
 function saveAsImage() {
   const area = document.getElementById("capture-area");
-  const titleElement = document.querySelector(".pair-title");
-  const title = titleElement ? titleElement.innerText : "Untitled";
+  const titleEl = document.querySelector(".pair-title");
+  const title = titleEl ? titleEl.innerText : "Untitled";
 
-  // 캡처 시 방해되는 UI 요소 숨기기
+  // 캡처 시 불필요한 UI 숨기기
   const allBtns = document.querySelectorAll(
-    ".btn-group, .del-btn, .export-btn, .color-popup",
+    ".btn-group, .del-btn, .export-btn, .color-popup, .list-btn",
   );
   allBtns.forEach((btn) => (btn.style.opacity = "0"));
 
@@ -188,33 +199,26 @@ function saveAsImage() {
   setTimeout(() => {
     html2canvas(area, {
       backgroundColor: "#ffffff",
-      scale: 3,
+      scale: 2, // 3은 용량이 너무 클 수 있어 2 권장
       useCORS: true,
-      allowTaint: true,
       logging: false,
     }).then((canvas) => {
       const link = document.createElement("a");
       link.download = `${title}_profile.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
-
-      // 버튼 다시 표시
       allBtns.forEach((btn) => (btn.style.opacity = "1"));
     });
-  }, 200);
+  }, 400);
 }
 
-// 모든 contenteditable 요소에 대해 붙여넣기 시 서식 제거
+// ==========================================
+// 붙여넣기 서식 제거
+// ==========================================
 document.addEventListener("paste", function (e) {
-  // 편집 가능한 영역(contenteditable)에서 발생한 이벤트인지 확인
-  const target = e.target;
-  if (target.isContentEditable) {
-    e.preventDefault(); // 기본 붙여넣기 동작 중단
-
-    // 클립보드에서 텍스트 데이터만 가져오기
+  if (e.target.isContentEditable) {
+    e.preventDefault();
     const text = (e.originalEvent || e).clipboardData.getData("text/plain");
-
-    // 현재 커서 위치에 텍스트 삽입
     document.execCommand("insertText", false, text);
   }
 });
