@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile Maker</title>
+
     <link
       href="https://webfontworld.github.io/gmarket/GmarketSans.css"
       rel="stylesheet"
@@ -20,367 +21,309 @@
   </head>
   <body>
     <div class="top-nav">
+      <div class="scale-control">
+        <span>페이지 축소</span>
+        <input
+          type="range"
+          min="0.5"
+          max="1"
+          step="0.01"
+          value="1"
+          oninput="updateScale(this.value)"
+        />
+        <span id="scale-val">100%</span>
+      </div>
       <button class="export-btn" onclick="saveAsImage()">📥 Export PNG</button>
     </div>
 
-    <div id="capture-area">
-      <div class="main-theme-container">
-        <div
-          class="img-box main-theme-box"
-          onclick="triggerFile('file-main-theme')"
-        >
-          <span class="plus-icon">+ Set Main Theme Image</span>
-          <img id="img-main-theme" alt="Main Theme" />
-          <button class="del-btn" onclick="resetImg(event, 'img-main-theme')">
-            ×
-          </button>
-          <input
-            type="file"
-            id="file-main-theme"
-            hidden
-            accept="image/*"
-            onchange="openEditor(this, 'img-main-theme', 16 / 5)"
-          />
-        </div>
-      </div>
-
-      <div class="pair-title-container">
-        <div class="pair-title" contenteditable="true">Untitled Pair</div>
-      </div>
-
-      <div class="main-wrapper">
-        <div class="nt-card outfit-card">
-          <div class="label">Outfit A</div>
-          <div class="img-box outfit-img-box" onclick="triggerFile('file-oa')">
-            <span class="plus-icon">+</span>
-            <img id="img-oa" />
-            <button class="del-btn" onclick="resetImg(event, 'img-oa')">
+    <div class="canvas-wrapper">
+      <div id="capture-area">
+        <div class="main-theme-container">
+          <div
+            class="img-box main-theme-box"
+            onclick="triggerFile('file-main-theme')"
+          >
+            <span class="plus-icon">+ Set Main Theme Image</span>
+            <img id="img-main-theme" alt="Main Theme" />
+            <button class="del-btn" onclick="resetImg(event, 'img-main-theme')">
               ×
             </button>
             <input
               type="file"
-              id="file-oa"
+              id="file-main-theme"
               hidden
-              onchange="openEditor(this, 'img-oa', 2 / 3)"
+              accept="image/*"
+              onchange="openEditor(this, 'img-main-theme', 16 / 5)"
             />
-          </div>
-          <div class="small-box-container">
-            <div
-              class="img-box small-img-box"
-              onclick="triggerFile('file-oa-exp')"
-            >
-              <span class="small-box-label">😊</span>
-              <img id="img-oa-exp" />
-              <button class="del-btn" onclick="resetImg(event, 'img-oa-exp')">
-                ×
-              </button>
-              <input
-                type="file"
-                id="file-oa-exp"
-                hidden
-                onchange="openEditor(this, 'img-oa-exp', 1 / 1)"
-              />
-            </div>
-            <div
-              class="img-box small-img-box"
-              onclick="triggerFile('file-oa-sd')"
-            >
-              <span class="small-box-label">🐰</span>
-              <img id="img-oa-sd" />
-              <button class="del-btn" onclick="resetImg(event, 'img-oa-sd')">
-                ×
-              </button>
-              <input
-                type="file"
-                id="file-oa-sd"
-                hidden
-                onchange="openEditor(this, 'img-oa-sd', 1 / 1)"
-              />
-            </div>
           </div>
         </div>
 
-        <div class="nt-card char-card">
-          <div class="name-input" contenteditable="true">Character A</div>
-          <div class="char-basic-info">
-            <div class="keywords-input" contenteditable="true">
-              키워드1 / 키워드2 / 키워드3
+        <div class="pair-title-container">
+          <div class="pair-title" contenteditable="true">Untitled Pair</div>
+        </div>
+
+        <div class="main-wrapper">
+          <div class="nt-card outfit-card">
+            <div class="label">Outfit A</div>
+            <div
+              class="img-box outfit-img-box"
+              onclick="triggerFile('file-oa')"
+            >
+              <span class="plus-icon">+</span>
+              <img id="img-oa" />
+              <button class="del-btn" onclick="resetImg(event, 'img-oa')">
+                ×
+              </button>
+              <input
+                type="file"
+                id="file-oa"
+                hidden
+                accept="image/*"
+                onchange="openEditor(this, 'img-oa', 2 / 3)"
+              />
             </div>
-            <div class="body-info-input" contenteditable="true">
-              000cm / 00kg
-            </div>
-          </div>
-          <div class="img-box char-img-box" onclick="triggerFile('file-ca')">
-            <span class="plus-icon">+</span>
-            <img id="img-ca" />
-            <button class="del-btn" onclick="resetImg(event, 'img-ca')">
-              ×
-            </button>
-            <input
-              type="file"
-              id="file-ca"
-              hidden
-              onchange="openEditor(this, 'img-ca', 1 / 1)"
-            />
-          </div>
-          <div id="list-a" class="info-list">
-            <div class="info-item">
-              <span class="info-text" contenteditable="true">특징 입력</span>
-              <div class="btn-group">
-                <button class="list-btn" onclick="addItem('list-a')">+</button>
+            <div class="small-box-container">
+              <div
+                class="img-box small-img-box"
+                onclick="triggerFile('file-oa-exp')"
+              >
+                <span class="small-box-label">😊</span>
+                <img id="img-oa-exp" />
+                <button class="del-btn" onclick="resetImg(event, 'img-oa-exp')">
+                  ×
+                </button>
+                <input
+                  type="file"
+                  id="file-oa-exp"
+                  hidden
+                  accept="image/*"
+                  onchange="openEditor(this, 'img-oa-exp', 1 / 1)"
+                />
+              </div>
+              <div
+                class="img-box small-img-box"
+                onclick="triggerFile('file-oa-sd')"
+              >
+                <span class="small-box-label">🐰</span>
+                <img id="img-oa-sd" />
+                <button class="del-btn" onclick="resetImg(event, 'img-oa-sd')">
+                  ×
+                </button>
+                <input
+                  type="file"
+                  id="file-oa-sd"
+                  hidden
+                  accept="image/*"
+                  onchange="openEditor(this, 'img-oa-sd', 1 / 1)"
+                />
               </div>
             </div>
           </div>
-          <div class="palette">
-            <span class="palette-label">Color</span>
-            <div
-              class="color-dot"
-              id="c-a-1"
-              style="background: #333"
-              onclick="pickColor('c-a-1')"
-            ></div>
-            <div
-              class="color-dot"
-              id="c-a-2"
-              style="background: #eee"
-              onclick="pickColor('c-a-2')"
-            ></div>
-            <div
-              class="color-dot"
-              id="c-a-3"
-              style="background: #dac6c6"
-              onclick="pickColor('c-a-3')"
-            ></div>
-          </div>
-        </div>
 
-        <div class="nt-card char-card">
-          <div class="name-input" contenteditable="true">Character B</div>
-          <div class="char-basic-info">
-            <div class="keywords-input" contenteditable="true">
-              키워드1 / 키워드2 / 키워드3
+          <div class="nt-card char-card">
+            <div class="name-input" contenteditable="true">Character A</div>
+            <div class="char-basic-info">
+              <div class="keywords-input" contenteditable="true">
+                키워드1 / 키워드2 / 키워드3
+              </div>
+              <div class="body-info-input" contenteditable="true">
+                000cm / 00kg
+              </div>
             </div>
-            <div class="body-info-input" contenteditable="true">
-              000cm / 00kg
+            <div class="img-box char-img-box" onclick="triggerFile('file-ca')">
+              <span class="plus-icon">+</span>
+              <img id="img-ca" />
+              <button class="del-btn" onclick="resetImg(event, 'img-ca')">
+                ×
+              </button>
+              <input
+                type="file"
+                id="file-ca"
+                hidden
+                accept="image/*"
+                onchange="openEditor(this, 'img-ca', 1 / 1)"
+              />
+            </div>
+            <div id="list-a" class="info-list">
+              <div class="info-item">
+                <span class="info-text" contenteditable="true">특징 입력</span>
+                <div class="btn-group">
+                  <button class="list-btn" onclick="addItem('list-a')">
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="palette">
+              <span class="palette-label">Color</span>
+              <div
+                class="color-dot"
+                id="c-a-1"
+                style="background: #333"
+                onclick="pickColor('c-a-1')"
+              ></div>
+              <div
+                class="color-dot"
+                id="c-a-2"
+                style="background: #eee"
+                onclick="pickColor('c-a-2')"
+              ></div>
+              <div
+                class="color-dot"
+                id="c-a-3"
+                style="background: #dac6c6"
+                onclick="pickColor('c-a-3')"
+              ></div>
             </div>
           </div>
-          <div class="img-box char-img-box" onclick="triggerFile('file-cb')">
-            <span class="plus-icon">+</span>
-            <img id="img-cb" />
-            <button class="del-btn" onclick="resetImg(event, 'img-cb')">
-              ×
-            </button>
-            <input
-              type="file"
-              id="file-cb"
-              hidden
-              onchange="openEditor(this, 'img-cb', 1 / 1)"
-            />
+
+          <div class="nt-card char-card">
+            <div class="name-input" contenteditable="true">Character B</div>
+            <div class="char-basic-info">
+              <div class="keywords-input" contenteditable="true">
+                키워드1 / 키워드2 / 키워드3
+              </div>
+              <div class="body-info-input" contenteditable="true">
+                000cm / 00kg
+              </div>
+            </div>
+            <div class="img-box char-img-box" onclick="triggerFile('file-cb')">
+              <span class="plus-icon">+</span>
+              <img id="img-cb" />
+              <button class="del-btn" onclick="resetImg(event, 'img-cb')">
+                ×
+              </button>
+              <input
+                type="file"
+                id="file-cb"
+                hidden
+                accept="image/*"
+                onchange="openEditor(this, 'img-cb', 1 / 1)"
+              />
+            </div>
+            <div id="list-b" class="info-list">
+              <div class="info-item">
+                <span class="info-text" contenteditable="true">특징 입력</span>
+                <div class="btn-group">
+                  <button class="list-btn" onclick="addItem('list-b')">
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="palette">
+              <span class="palette-label">Color</span>
+              <div
+                class="color-dot"
+                id="c-b-1"
+                style="background: #b19cd9"
+                onclick="pickColor('c-b-1')"
+              ></div>
+              <div
+                class="color-dot"
+                id="c-b-2"
+                style="background: #ffe4e1"
+                onclick="pickColor('c-b-2')"
+              ></div>
+              <div
+                class="color-dot"
+                id="c-b-3"
+                style="background: #eee"
+                onclick="pickColor('c-b-3')"
+              ></div>
+            </div>
           </div>
-          <div id="list-b" class="info-list">
-            <div class="info-item">
-              <span class="info-text" contenteditable="true">특징 입력</span>
-              <div class="btn-group">
-                <button class="list-btn" onclick="addItem('list-b')">+</button>
+
+          <div class="nt-card outfit-card">
+            <div class="label">Outfit B</div>
+            <div
+              class="img-box outfit-img-box"
+              onclick="triggerFile('file-ob')"
+            >
+              <span class="plus-icon">+</span>
+              <img id="img-ob" />
+              <button class="del-btn" onclick="resetImg(event, 'img-ob')">
+                ×
+              </button>
+              <input
+                type="file"
+                id="file-ob"
+                hidden
+                accept="image/*"
+                onchange="openEditor(this, 'img-ob', 2 / 3)"
+              />
+            </div>
+            <div class="small-box-container">
+              <div
+                class="img-box small-img-box"
+                onclick="triggerFile('file-ob-exp')"
+              >
+                <span class="small-box-label">😊</span>
+                <img id="img-ob-exp" />
+                <button class="del-btn" onclick="resetImg(event, 'img-ob-exp')">
+                  ×
+                </button>
+                <input
+                  type="file"
+                  id="file-ob-exp"
+                  hidden
+                  accept="image/*"
+                  onchange="openEditor(this, 'img-ob-exp', 1 / 1)"
+                />
+              </div>
+              <div
+                class="img-box small-img-box"
+                onclick="triggerFile('file-ob-sd')"
+              >
+                <span class="small-box-label">🐰</span>
+                <img id="img-ob-sd" />
+                <button class="del-btn" onclick="resetImg(event, 'img-ob-sd')">
+                  ×
+                </button>
+                <input
+                  type="file"
+                  id="file-ob-sd"
+                  hidden
+                  accept="image/*"
+                  onchange="openEditor(this, 'img-ob-sd', 1 / 1)"
+                />
               </div>
             </div>
           </div>
-          <div class="palette">
-            <span class="palette-label">Color</span>
-            <div
-              class="color-dot"
-              id="c-b-1"
-              style="background: #b19cd9"
-              onclick="pickColor('c-b-1')"
-            ></div>
-            <div
-              class="color-dot"
-              id="c-b-2"
-              style="background: #ffe4e1"
-              onclick="pickColor('c-b-2')"
-            ></div>
-            <div
-              class="color-dot"
-              id="c-b-3"
-              style="background: #eee"
-              onclick="pickColor('c-b-3')"
-            ></div>
-          </div>
         </div>
 
-        <div class="nt-card outfit-card">
-          <div class="label">Outfit B</div>
-          <div class="img-box outfit-img-box" onclick="triggerFile('file-ob')">
-            <span class="plus-icon">+</span>
-            <img id="img-ob" />
-            <button class="del-btn" onclick="resetImg(event, 'img-ob')">
-              ×
-            </button>
-            <input
-              type="file"
-              id="file-ob"
-              hidden
-              onchange="openEditor(this, 'img-ob', 2 / 3)"
-            />
-          </div>
-          <div class="small-box-container">
-            <div
-              class="img-box small-img-box"
-              onclick="triggerFile('file-ob-exp')"
-            >
-              <span class="small-box-label">😊</span>
-              <img id="img-ob-exp" />
-              <button class="del-btn" onclick="resetImg(event, 'img-ob-exp')">
-                ×
-              </button>
-              <input
-                type="file"
-                id="file-ob-exp"
-                hidden
-                onchange="openEditor(this, 'img-ob-exp', 1 / 1)"
-              />
-            </div>
-            <div
-              class="img-box small-img-box"
-              onclick="triggerFile('file-ob-sd')"
-            >
-              <span class="small-box-label">🐰</span>
-              <img id="img-ob-sd" />
-              <button class="del-btn" onclick="resetImg(event, 'img-ob-sd')">
-                ×
-              </button>
-              <input
-                type="file"
-                id="file-ob-sd"
-                hidden
-                onchange="openEditor(this, 'img-ob-sd', 1 / 1)"
-              />
-            </div>
-          </div>
+        <div class="copyright-container">
+          <span class="copyright-text" contenteditable="true"
+            >© 2026 TRPGSEUL All rights reserved.</span
+          >
         </div>
       </div>
-
-      <div class="copyright-container">
-        <span class="copyright-text" contenteditable="true"
-          >© 2026 TRPGSEUL All rights reserved.</span
-        >
+    </div>
+    <div id="crop-modal">
+      <div class="modal-inner">
+        <div class="crop-container">
+          <img id="crop-target" />
+        </div>
+        <div class="modal-btns">
+          <button onclick="applyCrop()" class="apply-btn">적용하기</button>
+          <button onclick="closeModal()" class="cancel-btn">취소</button>
+        </div>
       </div>
     </div>
 
-    <div
-      id="crop-modal"
-      style="
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-      "
-    >
-      <div
-        style="max-width: 80%; max-height: 70%; background: #fff; padding: 10px"
-      >
-        <img id="crop-target" style="max-width: 100%" />
-      </div>
-      <div style="margin-top: 20px">
-        <button
-          onclick="applyCrop()"
-          style="padding: 10px 20px; cursor: pointer"
-        >
-          적용하기
-        </button>
-        <button
-          onclick="closeModal()"
-          style="padding: 10px 20px; cursor: pointer; margin-left: 10px"
-        >
-          취소
-        </button>
-      </div>
-    </div>
-
-    <div
-      id="color-popup"
-      style="
-        display: none;
-        position: absolute;
-        background: #fff;
-        border: 1px solid #ccc;
-        padding: 10px;
-        z-index: 900;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      "
-    >
-      <div
-        style="
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 5px;
-          margin-bottom: 10px;
-        "
-      >
-        <div
-          onclick="selectColor('#ff0000')"
-          style="
-            width: 20px;
-            height: 20px;
-            background: #ff0000;
-            cursor: pointer;
-          "
-        ></div>
-        <div
-          onclick="selectColor('#00ff00')"
-          style="
-            width: 20px;
-            height: 20px;
-            background: #00ff00;
-            cursor: pointer;
-          "
-        ></div>
-        <div
-          onclick="selectColor('#0000ff')"
-          style="
-            width: 20px;
-            height: 20px;
-            background: #0000ff;
-            cursor: pointer;
-          "
-        ></div>
+    <div id="color-popup">
+      <div class="color-grid">
+        <div onclick="selectColor('#ff0000')" style="background: #ff0000"></div>
+        <div onclick="selectColor('#00ff00')" style="background: #00ff00"></div>
+        <div onclick="selectColor('#0000ff')" style="background: #0000ff"></div>
         <div
           onclick="selectColor('#ffffff')"
-          style="
-            width: 20px;
-            height: 20px;
-            background: #ffffff;
-            border: 1px solid #ddd;
-            cursor: pointer;
-          "
+          style="background: #ffffff; border: 1px solid #ddd"
         ></div>
-        <div
-          onclick="selectColor('#000000')"
-          style="
-            width: 20px;
-            height: 20px;
-            background: #000000;
-            cursor: pointer;
-          "
-        ></div>
-        <div
-          onclick="selectColor('#ffd700')"
-          style="
-            width: 20px;
-            height: 20px;
-            background: #ffd700;
-            cursor: pointer;
-          "
-        ></div>
+        <div onclick="selectColor('#000000')" style="background: #000000"></div>
+        <div onclick="selectColor('#ffd700')" style="background: #ffd700"></div>
       </div>
-      <button onclick="openSystemPicker()" style="width: 100%; font-size: 12px">
+      <button class="sys-picker-btn" onclick="openSystemPicker()">
         직접 선택
       </button>
     </div>

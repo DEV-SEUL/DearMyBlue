@@ -6,6 +6,30 @@ let targetId = "";
 let activeDotId = "";
 
 // ==========================================
+// 시트 전체 축소/확대 (Scale) 로직 - 추가됨
+// ==========================================
+function updateScale(value) {
+  const area = document.getElementById("capture-area");
+  if (!area) return;
+
+  // 슬라이더 값(0.5 ~ 1.0)에 따라 크기 조절
+  area.style.transform = `scale(${value})`;
+  area.style.transformOrigin = "top center";
+
+  // 축소 시 아래쪽 여백이 남는 문제 해결 (부모 요소 높이 조정)
+  const wrapper = area.parentElement;
+  if (wrapper) {
+    wrapper.style.height = area.offsetHeight * value + "px";
+  }
+
+  // 현재 배율 표시 (HTML에 scale-val 아이디를 가진 요소 필요)
+  const scaleDisplay = document.getElementById("scale-val");
+  if (scaleDisplay) {
+    scaleDisplay.innerText = Math.floor(value * 100) + "%";
+  }
+}
+
+// ==========================================
 // 파일 선택 및 이미지 편집 (Cropper)
 // ==========================================
 function triggerFile(id) {
@@ -35,18 +59,16 @@ function openEditor(input, imgId, ratio) {
 
     if (cropper) cropper.destroy();
 
-    // Cropper.js 초기화
     cropper = new Cropper(targetImg, {
       aspectRatio: ratio,
       viewMode: 1,
       autoCropArea: 1,
       dragMode: "move",
-      background: false, // 바둑판 배경 끄기 (취향껏)
+      background: false,
     });
   };
 
   reader.readAsDataURL(input.files[0]);
-  // 동일한 파일을 다시 선택해도 작동하도록 input 값 초기화
   input.value = "";
 }
 
@@ -60,11 +82,9 @@ function applyCrop() {
     const box = resultImg.parentElement;
     resultImg.src = canvas.toDataURL("image/png");
 
-    // 이미지 표시 처리
     resultImg.style.display = "block";
     box.classList.add("has-img");
 
-    // UI 요소 제어 (아이콘 숨기고 삭제버튼 보이기)
     const plusIcon = box.querySelector(".plus-icon, .small-box-label");
     const delBtn = box.querySelector(".del-btn");
 
@@ -86,7 +106,6 @@ function closeModal() {
 
 function resetImg(event, imgId) {
   event.stopPropagation();
-
   const resultImg = document.getElementById(imgId);
   if (!resultImg) return;
 
@@ -101,7 +120,6 @@ function resetImg(event, imgId) {
   if (plusIcon) plusIcon.style.display = "block";
   if (delBtn) delBtn.style.display = "none";
 
-  // 파일 인풋 초기화
   const fileInput = document.getElementById(
     "file-" + imgId.replace("img-", ""),
   );
@@ -167,7 +185,6 @@ function openSystemPicker() {
   if (currentDot) {
     colorInput.value = rgbToHex(currentDot.style.background) || "#000000";
   }
-
   colorInput.oninput = (e) => selectColor(e.target.value);
   colorInput.click();
 }
@@ -181,16 +198,21 @@ function rgbToHex(rgb) {
 }
 
 // ==========================================
-// 이미지로 저장 (PNG Export)
+// 이미지로 저장 (PNG Export) - 축소 보정 기능 통합
 // ==========================================
 function saveAsImage() {
   const area = document.getElementById("capture-area");
+  if (!area) return;
+
+  const originalTransform = area.style.transform; // 현재 적용된 축소 배율 보관
+  area.style.transform = "scale(1)"; // 저장 시에는 100% 비율로 복구
+
   const titleEl = document.querySelector(".pair-title");
   const title = titleEl ? titleEl.innerText : "Untitled";
 
   // 캡처 시 불필요한 UI 숨기기
   const allBtns = document.querySelectorAll(
-    ".btn-group, .del-btn, .export-btn, .color-popup, .list-btn",
+    ".btn-group, .del-btn, .export-btn, .color-popup, .list-btn, .scale-control",
   );
   allBtns.forEach((btn) => (btn.style.opacity = "0"));
 
@@ -199,7 +221,7 @@ function saveAsImage() {
   setTimeout(() => {
     html2canvas(area, {
       backgroundColor: "#ffffff",
-      scale: 2, // 3은 용량이 너무 클 수 있어 2 권장
+      scale: 2, // 저장 화질 보정
       useCORS: true,
       logging: false,
     }).then((canvas) => {
@@ -207,7 +229,10 @@ function saveAsImage() {
       link.download = `${title}_profile.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
+
+      // UI 복구 및 축소 배율 복구
       allBtns.forEach((btn) => (btn.style.opacity = "1"));
+      area.style.transform = originalTransform;
     });
   }, 400);
 }
