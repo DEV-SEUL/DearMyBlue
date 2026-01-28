@@ -459,3 +459,29 @@ body {
   color: white;
   border: none;
 }
+
+.copyright-container {
+  margin-top: 10px;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.copyright-text {
+  font-size: 14px;
+  color: #aaa;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: text;
+  outline: none;
+}
+
+.copyright-text:hover {
+  color: #666;
+}
+
+/* 캡처 시에도 깔끔하게 나오도록 설정 */
+#capture-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}

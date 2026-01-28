@@ -21,6 +21,26 @@
     </div>
 
     <div id="capture-area">
+      <div class="main-theme-container">
+        <div
+          class="img-box main-theme-box"
+          onclick="triggerFile('file-main-theme')"
+        >
+          <span class="plus-icon">+ Set Main Theme Image</span>
+          <img id="img-main-theme" alt="Main Theme" />
+          <button class="del-btn" onclick="resetImg(event, 'img-main-theme')">
+            ×
+          </button>
+          <input
+            type="file"
+            id="file-main-theme"
+            hidden
+            accept="image/*"
+            onchange="openEditor(this, 'img-main-theme', 16 / 5)"
+          />
+        </div>
+      </div>
+
       <div class="pair-title-container">
         <div class="pair-title" contenteditable="true">Untitled Pair</div>
       </div>
@@ -30,7 +50,7 @@
           <div class="label">Outfit A</div>
           <div class="img-box outfit-img-box" onclick="triggerFile('file-oa')">
             <span class="plus-icon">+</span>
-            <img id="img-oa" alt="Outfit A" />
+            <img id="img-oa" />
             <button class="del-btn" onclick="resetImg(event, 'img-oa')">
               ×
             </button>
@@ -38,7 +58,6 @@
               type="file"
               id="file-oa"
               hidden
-              accept="image/*"
               onchange="openEditor(this, 'img-oa', 2 / 3)"
             />
           </div>
@@ -48,7 +67,7 @@
               onclick="triggerFile('file-oa-exp')"
             >
               <span class="small-box-label">😊</span>
-              <img id="img-oa-exp" alt="Expression" />
+              <img id="img-oa-exp" />
               <button class="del-btn" onclick="resetImg(event, 'img-oa-exp')">
                 ×
               </button>
@@ -56,7 +75,6 @@
                 type="file"
                 id="file-oa-exp"
                 hidden
-                accept="image/*"
                 onchange="openEditor(this, 'img-oa-exp', 1 / 1)"
               />
             </div>
@@ -65,7 +83,7 @@
               onclick="triggerFile('file-oa-sd')"
             >
               <span class="small-box-label">🐰</span>
-              <img id="img-oa-sd" alt="SD" />
+              <img id="img-oa-sd" />
               <button class="del-btn" onclick="resetImg(event, 'img-oa-sd')">
                 ×
               </button>
@@ -73,7 +91,6 @@
                 type="file"
                 id="file-oa-sd"
                 hidden
-                accept="image/*"
                 onchange="openEditor(this, 'img-oa-sd', 1 / 1)"
               />
             </div>
@@ -92,7 +109,7 @@
           </div>
           <div class="img-box char-img-box" onclick="triggerFile('file-ca')">
             <span class="plus-icon">+</span>
-            <img id="img-ca" alt="Character A" />
+            <img id="img-ca" />
             <button class="del-btn" onclick="resetImg(event, 'img-ca')">
               ×
             </button>
@@ -100,7 +117,6 @@
               type="file"
               id="file-ca"
               hidden
-              accept="image/*"
               onchange="openEditor(this, 'img-ca', 1 / 1)"
             />
           </div>
@@ -128,9 +144,9 @@
             ></div>
             <div
               class="color-dot"
-              id="c-a-3"
-              style="background: #94a3b8"
-              onclick="pickColor('c-a-3')"
+              id="c-a-2"
+              style="background: #dac6c6"
+              onclick="pickColor('c-a-2')"
             ></div>
           </div>
         </div>
@@ -147,7 +163,7 @@
           </div>
           <div class="img-box char-img-box" onclick="triggerFile('file-cb')">
             <span class="plus-icon">+</span>
-            <img id="img-cb" alt="Character B" />
+            <img id="img-cb" />
             <button class="del-btn" onclick="resetImg(event, 'img-cb')">
               ×
             </button>
@@ -155,7 +171,6 @@
               type="file"
               id="file-cb"
               hidden
-              accept="image/*"
               onchange="openEditor(this, 'img-cb', 1 / 1)"
             />
           </div>
@@ -183,9 +198,9 @@
             ></div>
             <div
               class="color-dot"
-              id="c-b-3"
-              style="background: #fbbf24"
-              onclick="pickColor('c-b-3')"
+              id="c-a-2"
+              style="background: #eee"
+              onclick="pickColor('c-a-2')"
             ></div>
           </div>
         </div>
@@ -194,7 +209,7 @@
           <div class="label">Outfit B</div>
           <div class="img-box outfit-img-box" onclick="triggerFile('file-ob')">
             <span class="plus-icon">+</span>
-            <img id="img-ob" alt="Outfit B" />
+            <img id="img-ob" />
             <button class="del-btn" onclick="resetImg(event, 'img-ob')">
               ×
             </button>
@@ -202,7 +217,6 @@
               type="file"
               id="file-ob"
               hidden
-              accept="image/*"
               onchange="openEditor(this, 'img-ob', 2 / 3)"
             />
           </div>
@@ -212,7 +226,7 @@
               onclick="triggerFile('file-ob-exp')"
             >
               <span class="small-box-label">😊</span>
-              <img id="img-ob-exp" alt="Expression" />
+              <img id="img-ob-exp" />
               <button class="del-btn" onclick="resetImg(event, 'img-ob-exp')">
                 ×
               </button>
@@ -220,7 +234,6 @@
                 type="file"
                 id="file-ob-exp"
                 hidden
-                accept="image/*"
                 onchange="openEditor(this, 'img-ob-exp', 1 / 1)"
               />
             </div>
@@ -229,7 +242,7 @@
               onclick="triggerFile('file-ob-sd')"
             >
               <span class="small-box-label">🐰</span>
-              <img id="img-ob-sd" alt="SD" />
+              <img id="img-ob-sd" />
               <button class="del-btn" onclick="resetImg(event, 'img-ob-sd')">
                 ×
               </button>
@@ -237,117 +250,22 @@
                 type="file"
                 id="file-ob-sd"
                 hidden
-                accept="image/*"
                 onchange="openEditor(this, 'img-ob-sd', 1 / 1)"
               />
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div id="crop-modal">
-      <div class="modal-content">
-        <div class="modal-title">이미지 자르기</div>
-        <div class="crop-area"><img id="crop-target" alt="Crop target" /></div>
-        <div class="modal-btns">
-          <button class="m-btn" onclick="closeModal()">취소</button>
-          <button class="m-btn save" onclick="applyCrop()">적용하기</button>
-        </div>
+      <div class="copyright-container">
+        <span class="copyright-text" contenteditable="true">
+          © 2026 TRPGSEUL All rights reserved. (필요 시 추가)
+        </span>
       </div>
     </div>
 
-    <div id="color-popup" class="color-popup" style="display: none">
-      <div class="popup-header">Select Color</div>
-
-      <div class="color-section-label">Default</div>
-      <div class="color-grid">
-        <div
-          class="color-option"
-          style="background: #37352f"
-          onclick="selectColor('#37352f')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #787774"
-          onclick="selectColor('#787774')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #9b9a97"
-          onclick="selectColor('#9b9a97')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #ebeced"
-          onclick="selectColor('#ebeced')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #ffffff; border: 1px solid #ddd"
-          onclick="selectColor('#ffffff')"
-        ></div>
-      </div>
-
-      <div class="color-section-label">Soft & Pastel</div>
-      <div class="color-grid">
-        <div
-          class="color-option"
-          style="background: #ffebec"
-          onclick="selectColor('#ffebec')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #fff5eb"
-          onclick="selectColor('#fff5eb')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #fffbd4"
-          onclick="selectColor('#fffbd4')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #f1f9e3"
-          onclick="selectColor('#f1f9e3')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #e7f3f8"
-          onclick="selectColor('#e7f3f8')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #e03e3e"
-          onclick="selectColor('#e03e3e')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #dfab01"
-          onclick="selectColor('#dfab01')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #0f7b6c"
-          onclick="selectColor('#0f7b6c')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #2383e2"
-          onclick="selectColor('#2383e2')"
-        ></div>
-        <div
-          class="color-option"
-          style="background: #6a459b"
-          onclick="selectColor('#6a459b')"
-        ></div>
-      </div>
-
-      <div class="popup-divider"></div>
-      <button class="custom-picker-btn" onclick="openSystemPicker()">
-        <span class="icon">🎨</span> 사용자 지정 색상
-      </button>
-    </div>
+    <div id="crop-modal">...</div>
+    <div id="color-popup">...</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
