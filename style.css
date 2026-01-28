@@ -366,6 +366,7 @@ body {
   line-height: 1.5;
   font-weight: 500;
   font-family: "GmarketSans", sans-serif;
+  color: var(--nt-sub);
 }
 
 /* 추가/삭제 버튼 그룹 */
