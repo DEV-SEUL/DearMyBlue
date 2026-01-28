@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notion Style Profile Maker</title>
+
+    <!-- 외부 폰트 -->
+    <link
+      href="https://webfontworld.github.io/gmarket/GmarketSans.css"
+      rel="stylesheet"
+    />
+
+    <!-- Cropper.js CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- 메인 스타일시트 -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- ========================================
+         상단 네비게이션
+         ======================================== -->
+    <div class="top-nav">
+      <button class="export-btn" onclick="saveAsImage()">📥 Export PNG</button>
+    </div>
+
+    <!-- ========================================
+         캡처 영역
+         ======================================== -->
+    <div id="capture-area">
+      <!-- 페어 타이틀 -->
+      <div class="pair-title" contenteditable="true">Untitled Pair</div>
+
+      <!-- 카드들을 담는 메인 래퍼 -->
+      <div class="main-wrapper">
+        <!-- ========== 의상 카드 A ========== -->
+        <div class="nt-card outfit-card">
+          <div class="label">Outfit A</div>
+
+          <!-- 메인 의상 이미지 -->
+          <div class="img-box outfit-img-box" onclick="triggerFile('file-oa')">
+            <span class="plus-icon">+</span>
+            <img id="img-oa" alt="Outfit A" />
+            <input
+              type="file"
+              id="file-oa"
+              hidden
+              accept="image/*"
+              onchange="openEditor(this, 'img-oa', 2 / 3)"
+            />
+          </div>
+
+          <!-- 표정 & SD 이미지 -->
+          <div class="small-box-container">
+            <div
+              class="img-box small-img-box"
+              onclick="triggerFile('file-oa-exp')"
+            >
+              <span class="small-box-label">😊</span>
+              <img id="img-oa-exp" alt="Expression" />
+              <input
+                type="file"
+                id="file-oa-exp"
+                hidden
+                accept="image/*"
+                onchange="openEditor(this, 'img-oa-exp', 1 / 1)"
+              />
+            </div>
+            <div
+              class="img-box small-img-box"
+              onclick="triggerFile('file-oa-sd')"
+            >
+              <span class="small-box-label">🐰</span>
+              <img id="img-oa-sd" alt="SD" />
+              <input
+                type="file"
+                id="file-oa-sd"
+                hidden
+                accept="image/*"
+                onchange="openEditor(this, 'img-oa-sd', 1 / 1)"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== 캐릭터 카드 A ========== -->
+        <div class="nt-card char-card">
+          <!-- 캐릭터 이름 -->
+          <div class="name-input" contenteditable="true">Character A</div>
+
+          <!-- 키워드 & 신장/체중 -->
+          <div class="char-basic-info">
+            <div class="keywords-input" contenteditable="true">
+              키워드1 / 키워드2 / 키워드3
+            </div>
+            <div class="body-info-input" contenteditable="true">
+              000cm / 00kg
+            </div>
+          </div>
+
+          <!-- 캐릭터 이미지 -->
+          <div class="img-box char-img-box" onclick="triggerFile('file-ca')">
+            <span class="plus-icon">+</span>
+            <img id="img-ca" alt="Character A" />
+            <input
+              type="file"
+              id="file-ca"
+              hidden
+              accept="image/*"
+              onchange="openEditor(this, 'img-ca', 1 / 1)"
+            />
+          </div>
+
+          <!-- 특징 리스트 -->
+          <div id="list-a" class="info-list">
+            <div class="info-item">
+              <span class="info-text" contenteditable="true">특징 입력</span>
+              <div class="btn-group">
+                <button class="list-btn" onclick="addItem('list-a')">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 컬러 팔레트 -->
+          <div class="palette">
+            <span class="palette-label">Color</span>
+            <div
+              class="color-dot"
+              id="c-a-1"
+              style="background: #333"
+              onclick="pickColor('c-a-1')"
+            ></div>
+            <div
+              class="color-dot"
+              id="c-a-2"
+              style="background: #eee"
+              onclick="pickColor('c-a-2')"
+            ></div>
+            <div
+              class="color-dot"
+              id="c-a-3"
+              style="background: #94a3b8"
+              onclick="pickColor('c-a-3')"
+            ></div>
+          </div>
+        </div>
+
+        <!-- ========== 캐릭터 카드 B ========== -->
+        <div class="nt-card char-card">
+          <!-- 캐릭터 이름 -->
+          <div class="name-input" contenteditable="true">Character B</div>
+
+          <!-- 키워드 & 신장/체중 -->
+          <div class="char-basic-info">
+            <div class="keywords-input" contenteditable="true">
+              키워드1 / 키워드2 / 키워드3
+            </div>
+            <div class="body-info-input" contenteditable="true">
+              000cm / 00kg
+            </div>
+          </div>
+
+          <!-- 캐릭터 이미지 -->
+          <div class="img-box char-img-box" onclick="triggerFile('file-cb')">
+            <span class="plus-icon">+</span>
+            <img id="img-cb" alt="Character B" />
+            <input
+              type="file"
+              id="file-cb"
+              hidden
+              accept="image/*"
+              onchange="openEditor(this, 'img-cb', 1 / 1)"
+            />
+          </div>
+
+          <!-- 특징 리스트 -->
+          <div id="list-b" class="info-list">
+            <div class="info-item">
+              <span class="info-text" contenteditable="true">특징 입력</span>
+              <div class="btn-group">
+                <button class="list-btn" onclick="addItem('list-b')">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 컬러 팔레트 -->
+          <div class="palette">
+            <span class="palette-label">Color</span>
+            <div
+              class="color-dot"
+              id="c-b-1"
+              style="background: #b19cd9"
+              onclick="pickColor('c-b-1')"
+            ></div>
+            <div
+              class="color-dot"
+              id="c-b-2"
+              style="background: #ffe4e1"
+              onclick="pickColor('c-b-2')"
+            ></div>
+            <div
+              class="color-dot"
+              id="c-b-3"
+              style="background: #fbbf24"
+              onclick="pickColor('c-b-3')"
+            ></div>
+          </div>
+        </div>
+
+        <!-- ========== 의상 카드 B ========== -->
+        <div class="nt-card outfit-card">
+          <div class="label">Outfit B</div>
+
+          <!-- 메인 의상 이미지 -->
+          <div class="img-box outfit-img-box" onclick="triggerFile('file-ob')">
+            <span class="plus-icon">+</span>
+            <img id="img-ob" alt="Outfit B" />
+            <input
+              type="file"
+              id="file-ob"
+              hidden
+              accept="image/*"
+              onchange="openEditor(this, 'img-ob', 2 / 3)"
+            />
+          </div>
+
+          <!-- 표정 & SD 이미지 -->
+          <div class="small-box-container">
+            <div
+              class="img-box small-img-box"
+              onclick="triggerFile('file-ob-exp')"
+            >
+              <span class="small-box-label">😊</span>
+              <img id="img-ob-exp" alt="Expression" />
+              <input
+                type="file"
+                id="file-ob-exp"
+                hidden
+                accept="image/*"
+                onchange="openEditor(this, 'img-ob-exp', 1 / 1)"
+              />
+            </div>
+            <div
+              class="img-box small-img-box"
+              onclick="triggerFile('file-ob-sd')"
+            >
+              <span class="small-box-label">🐰</span>
+              <img id="img-ob-sd" alt="SD" />
+              <input
+                type="file"
+                id="file-ob-sd"
+                hidden
+                accept="image/*"
+                onchange="openEditor(this, 'img-ob-sd', 1 / 1)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         이미지 크롭 모달
+         ======================================== -->
+    <div id="crop-modal">
+      <div class="modal-content">
+        <div class="modal-title">이미지 자르기</div>
+        <div class="crop-area">
+          <img id="crop-target" alt="Crop target" />
+        </div>
+        <div class="modal-btns">
+          <button class="m-btn" onclick="closeModal()">취소</button>
+          <button class="m-btn save" onclick="applyCrop()">적용하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         외부 스크립트
+         ======================================== -->
+    <!-- Cropper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 메인 스크립트 -->
+    <script src="script.js"></script>
+  </body>
+</html>
