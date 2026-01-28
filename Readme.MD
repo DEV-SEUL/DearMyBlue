@@ -3,7 +3,7 @@
 ![Version](https://img.shields.io/badge/version-2.0.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-## 📸 주요 기능
+## 주요 기능
 
 - **4개 카드 레이아웃**: 의상 A - 캐릭터 A - 캐릭터 B - 의상 B
 - **이미지 크롭**: 업로드한 이미지를 원하는 비율로 자르기
@@ -13,13 +13,13 @@
 - **PNG 저장**: 전체 프로필을 고해상도 이미지로 저장
 - **반응형**: 모바일, 태블릿, 데스크톱 모두 지원
 
-## 🎯 사용 예시
+## 사용 예시
 
 - 커미션 레퍼런스 시트
 - 소설/만화 캐릭터 프로필
 - TRPG 캐릭터 시트
 
-## 📦 파일 구조
+## 파일 구조
 
 ```
 notion-profile-maker/
@@ -126,3 +126,4 @@ notion-profile-maker/
 ---
 
 ⭐ 이 프로젝트가 마음에 드셨다면 Star를 눌러주세요!
+
