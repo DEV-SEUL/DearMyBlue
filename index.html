@@ -280,7 +280,7 @@
 
         <div class="copyright-container">
           <span class="copyright-text" contenteditable="true"
-            >© 2026 TRPGSEUL All rights reserved.</span
+            >© 2026 TRPGSEUL All rights reserved. (필요 시 추가)</span
           >
         </div>
       </div>
@@ -304,23 +304,16 @@
     </div>
 
     <div id="color-popup">
-      <div class="popup-header">Color Palette</div>
-      <div class="color-grid">
-        <div onclick="selectColor('#ff0000')" style="background: #ff0000"></div>
-        <div onclick="selectColor('#00ff00')" style="background: #00ff00"></div>
-        <div onclick="selectColor('#0000ff')" style="background: #0000ff"></div>
-        <div
-          onclick="selectColor('#ffffff')"
-          style="background: #ffffff; border: 1px solid #eee"
-        ></div>
-        <div onclick="selectColor('#000000')" style="background: #000000"></div>
-        <div onclick="selectColor('#ffd700')" style="background: #ffd700"></div>
-        <div onclick="selectColor('#b19cd9')" style="background: #b19cd9"></div>
-        <div onclick="selectColor('#6b6b6b')" style="background: #6b6b6b"></div>
+      <div class="popup-header">Color Picker</div>
+
+      <div id="picker-content"></div>
+
+      <div class="popup-footer">
+        <button class="p-btn" onclick="closeColorPopup(false)">취소</button>
+        <button class="p-btn apply" onclick="closeColorPopup(true)">
+          적용
+        </button>
       </div>
-      <button class="sys-picker-btn" onclick="openSystemPicker()">
-        직접 선택
-      </button>
     </div>
 
     <input
@@ -333,5 +326,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
+    <script src="https://unpkg.com/vanilla-picker@2"></script>
   </body>
 </html>

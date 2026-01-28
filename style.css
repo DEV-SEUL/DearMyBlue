@@ -34,7 +34,7 @@ body {
 .top-nav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   background: #fff;
   padding: 12px 20px;
   border-radius: 10px;
@@ -93,7 +93,7 @@ body {
 }
 
 #capture-area {
-  padding: 20px 40px 20px;
+  padding: 10px 40px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -102,7 +102,7 @@ body {
 }
 
 .pair-title-container {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .pair-title {
@@ -330,6 +330,14 @@ body {
   border-radius: 2px;
 }
 
+#hidden-picker {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .color-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -435,8 +443,8 @@ body {
    7. 푸터 및 애니메이션
    ======================================== */
 .copyright-container {
-  margin: 40px 0;
   text-align: center;
+  margin: 10px auto 0 auto;
   width: 100%;
 }
 
@@ -466,4 +474,115 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+#color-popup {
+  display: none;
+  position: absolute;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: var(--shadow-popup);
+  z-index: 2500;
+  width: 180px; /* 라이브러리 크기에 맞춰 조정 */
+}
+
+#color-popup {
+  display: none;
+  position: absolute;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: var(--shadow-popup);
+  z-index: 2500;
+  width: 280px;
+  animation: popup-fade 0.2s ease-out;
+  border: 1px solid var(--nt-border);
+}
+
+/* 2) 팝업 헤더 */
+.popup-header {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #91918e;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 2px;
+}
+.popup-header::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 10px;
+  background: var(--nt-blue);
+  border-radius: 2px;
+}
+
+/* 3) 라이브러리 내부 요소 커스텀 (Vanilla-Picker) */
+.picker_wrapper {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* 색상 선택판 */
+.picker_sl {
+  border-radius: 8px !important;
+  margin-bottom: 12px !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 슬라이더 바 (채도/밝기) */
+.picker_slider {
+  height: 12px !important;
+  border-radius: 6px !important;
+  margin-bottom: 8px !important;
+}
+
+/* 4) 하단 버튼 영역 */
+.popup-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f1ef;
+}
+
+.p-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid var(--nt-border);
+  background: #fff;
+  color: var(--nt-sub);
+}
+
+.p-btn.apply {
+  background: var(--nt-text);
+  color: #fff;
+  border: none;
+}
+
+.p-btn:hover {
+  background: var(--nt-hover);
+}
+
+.p-btn.apply:hover {
+  background: #000;
+}
+
+/* 불필요한 라이브러리 기본 요소 숨기기 */
+.picker_editor,
+.picker_done,
+.picker_sample {
+  display: none !important;
 }
