@@ -460,6 +460,39 @@ body {
   border: none;
 }
 
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #fff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+  z-index: 2000;
+  margin-bottom: 30px;
+}
+
+.scale-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.canvas-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+#capture-area {
+  transition: transform 0.2s ease-out; /* 부드러운 축소 효과 */
+}
+
 .copyright-container {
   margin-top: 30px;
   padding-top: 20px;
