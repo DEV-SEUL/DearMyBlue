@@ -32,26 +32,6 @@
 
     <div class="canvas-wrapper">
       <div id="capture-area">
-        <div class="main-theme-container">
-          <div
-            class="img-box main-theme-box"
-            onclick="triggerFile('file-main-theme')"
-          >
-            <span class="plus-icon">+ Set Main Theme Image</span>
-            <img id="img-main-theme" alt="Main Theme" />
-            <button class="del-btn" onclick="resetImg(event, 'img-main-theme')">
-              ×
-            </button>
-            <input
-              type="file"
-              id="file-main-theme"
-              hidden
-              accept="image/*"
-              onchange="openEditor(this, 'img-main-theme', 16 / 5)"
-            />
-          </div>
-        </div>
-
         <div class="pair-title-container">
           <div class="pair-title" contenteditable="true">Untitled Pair</div>
         </div>
@@ -81,7 +61,7 @@
                 class="img-box small-img-box"
                 onclick="triggerFile('file-oa-exp')"
               >
-                <span class="small-box-label">😊</span>
+                <span class="small-box-label">표정</span>
                 <img id="img-oa-exp" />
                 <button class="del-btn" onclick="resetImg(event, 'img-oa-exp')">
                   ×
@@ -98,7 +78,7 @@
                 class="img-box small-img-box"
                 onclick="triggerFile('file-oa-sd')"
               >
-                <span class="small-box-label">🐰</span>
+                <span class="small-box-label">동물화</span>
                 <img id="img-oa-sd" />
                 <button class="del-btn" onclick="resetImg(event, 'img-oa-sd')">
                   ×
@@ -264,7 +244,7 @@
                 class="img-box small-img-box"
                 onclick="triggerFile('file-ob-exp')"
               >
-                <span class="small-box-label">😊</span>
+                <span class="small-box-label">표정</span>
                 <img id="img-ob-exp" />
                 <button class="del-btn" onclick="resetImg(event, 'img-ob-exp')">
                   ×
@@ -281,7 +261,7 @@
                 class="img-box small-img-box"
                 onclick="triggerFile('file-ob-sd')"
               >
-                <span class="small-box-label">🐰</span>
+                <span class="small-box-label">동물화</span>
                 <img id="img-ob-sd" />
                 <button class="del-btn" onclick="resetImg(event, 'img-ob-sd')">
                   ×
@@ -297,6 +277,7 @@
             </div>
           </div>
         </div>
+
         <div class="copyright-container">
           <span class="copyright-text" contenteditable="true"
             >© 2026 TRPGSEUL All rights reserved.</span
@@ -304,6 +285,7 @@
         </div>
       </div>
     </div>
+
     <div id="crop-modal">
       <div class="modal-content">
         <div class="modal-title">이미지 편집</div>
@@ -311,8 +293,12 @@
           <img id="crop-target" />
         </div>
         <div class="modal-btns">
-          <button onclick="applyCrop()" class="m-btn save">적용하기</button>
-          <button onclick="closeModal()" class="m-btn">취소</button>
+          <button type="button" onclick="applyCrop()" class="m-btn save">
+            적용하기
+          </button>
+          <button type="button" onclick="closeModal()" class="m-btn">
+            취소
+          </button>
         </div>
       </div>
     </div>

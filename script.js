@@ -4,13 +4,12 @@
 let cropper = null;
 let targetId = "";
 let activeDotId = "";
-let currentScale = 1.0; // 기본 배율 100%
+let currentScale = 1.0;
 
 // ==========================================
-// 2. 페이지 축소/확대 (Button 방식)
+// 2. 페이지 축소/확대
 // ==========================================
 function adjustScale(amount) {
-  // 최소 0.5(50%) ~ 최대 1.0(100%) 범위 제한
   currentScale = Math.min(1.0, Math.max(0.5, currentScale + amount));
   updateDisplay();
 }
@@ -20,15 +19,12 @@ function updateDisplay() {
   const valText = document.getElementById("scale-val");
   if (!area || !valText) return;
 
-  // 화면 배율 적용 (상단 중앙 기준)
   area.style.transform = `scale(${currentScale})`;
   area.style.transformOrigin = "top center";
 
-  // 배율 텍스트 업데이트
   const displayVal = Math.round(currentScale * 100);
   valText.innerText = `${displayVal}%`;
 
-  // 축소 시 발생하는 하단 빈 공간 방지 (부모 컨테이너 높이 보정)
   const wrapper = area.parentElement;
   if (wrapper) {
     wrapper.style.height = area.offsetHeight * currentScale + "px";
@@ -36,7 +32,7 @@ function updateDisplay() {
 }
 
 // ==========================================
-// 3. 이미지 편집 및 크롭 (Cropper.js)
+// 3. 이미지 편집 및 크롭 (중요: 함수 분리 완료)
 // ==========================================
 function triggerFile(id) {
   const el = document.getElementById(id);
@@ -70,9 +66,10 @@ function openEditor(input, imgId, ratio) {
   };
 
   reader.readAsDataURL(input.files[0]);
-  input.value = ""; // 동일 파일 재선택 가능하도록 초기화
+  input.value = ""; // 같은 파일 다시 올려도 작동하도록 초기화
 }
 
+// 적용하기 버튼 기능
 function applyCrop() {
   if (!cropper) return;
 
@@ -85,12 +82,13 @@ function applyCrop() {
     resultImg.style.display = "block";
 
     const plusIcon = box.querySelector(".plus-icon, .small-box-label");
-    if (plusIcon) plusIcon.style.opacity = "0"; // 아이콘 숨김
+    if (plusIcon) plusIcon.style.opacity = "0";
   }
 
   closeModal();
 }
 
+// 취소 버튼 기능
 function closeModal() {
   const modal = document.getElementById("crop-modal");
   if (modal) modal.style.display = "none";
@@ -194,14 +192,9 @@ function saveAsImage() {
   const area = document.getElementById("capture-area");
   if (!area) return;
 
-  // 1. 현재 배율 임시 해제 (100%로 캡처해야 고화질)
   const originalTransform = area.style.transform;
-  const originalHeight = area.parentElement.style.height;
-
   area.style.transform = "scale(1)";
-  area.parentElement.style.height = "auto";
 
-  // 2. 불필요한 UI 요소 숨기기
   const hideTargets = document.querySelectorAll(
     ".btn-group, .del-btn, .top-nav, #color-popup",
   );
@@ -212,7 +205,7 @@ function saveAsImage() {
   setTimeout(() => {
     html2canvas(area, {
       backgroundColor: "#ffffff",
-      scale: 2, // 2배 선명하게 저장
+      scale: 2,
       useCORS: true,
       logging: false,
     }).then((canvas) => {
@@ -222,17 +215,13 @@ function saveAsImage() {
       link.href = canvas.toDataURL("image/png");
       link.click();
 
-      // 3. UI 및 배율 복구
       hideTargets.forEach((el) => (el.style.visibility = "visible"));
       area.style.transform = originalTransform;
-      area.parentElement.style.height = originalHeight;
     });
   }, 300);
 }
 
-// ==========================================
-// 7. 유틸리티 (붙여넣기 서식 제거)
-// ==========================================
+// 서식 없는 붙여넣기
 document.addEventListener("paste", function (e) {
   if (e.target.isContentEditable) {
     e.preventDefault();
