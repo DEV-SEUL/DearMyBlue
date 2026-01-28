@@ -2,15 +2,11 @@
 // 전역 변수
 // ==========================================
 let cropper = null; // Cropper.js 인스턴스
-let targetId = ""; // 현재 편집 중인 이미지 ID
+let targetId = ""; // 현재 편집 중인 이미지 ID (img 요소의 ID)
 
 // ==========================================
 // 파일 선택 트리거
 // ==========================================
-/**
- * 숨겨진 파일 input을 클릭하여 파일 선택 대화상자 열기
- * @param {string} id - 클릭할 input 요소의 ID
- */
 function triggerFile(id) {
   document.getElementById(id).click();
 }
@@ -18,12 +14,6 @@ function triggerFile(id) {
 // ==========================================
 // 이미지 편집 모달 열기
 // ==========================================
-/**
- * 선택한 이미지를 크롭 모달에서 편집
- * @param {HTMLInputElement} input - 파일 input 요소
- * @param {string} imgId - 결과를 표시할 img 요소의 ID
- * @param {number} ratio - 크롭 비율 (예: 2/3, 1/1)
- */
 function openEditor(input, imgId, ratio) {
   if (!input.files || !input.files[0]) return;
 
@@ -37,10 +27,8 @@ function openEditor(input, imgId, ratio) {
     targetImg.src = e.target.result;
     modal.style.display = "flex";
 
-    // 기존 cropper 인스턴스 제거
     if (cropper) cropper.destroy();
 
-    // 새 cropper 인스턴스 생성
     cropper = new Cropper(targetImg, {
       aspectRatio: ratio,
       viewMode: 1,
@@ -50,31 +38,67 @@ function openEditor(input, imgId, ratio) {
   };
 
   reader.readAsDataURL(input.files[0]);
-  input.value = ""; // 같은 파일 재선택 가능하도록
+  input.value = "";
 }
 
 // ==========================================
-// 크롭 적용
+// 크롭 적용 (수정됨: UI 업데이트 로직 추가)
 // ==========================================
-/**
- * 크롭된 이미지를 타겟 img 요소에 적용
- */
 function applyCrop() {
   const canvas = cropper.getCroppedCanvas();
   const resultImg = document.getElementById(targetId);
+  const box = resultImg.parentElement;
 
+  // 이미지 적용 및 표시
   resultImg.src = canvas.toDataURL();
-  resultImg.parentElement.classList.add("has-img");
+  resultImg.style.display = "block";
+  box.classList.add("has-img");
+
+  // 이미지 추가 시 플러스 아이콘/라벨 숨기기 및 삭제 버튼 보이기
+  const plusIcon = box.querySelector(".plus-icon, .small-box-label");
+  const delBtn = box.querySelector(".del-btn");
+
+  if (plusIcon) plusIcon.style.display = "none";
+  if (delBtn) delBtn.style.display = "flex";
 
   closeModal();
 }
 
 // ==========================================
-// 모달 닫기
+// 이미지 초기화 (새로 추가: 삭제 버튼 기능)
 // ==========================================
 /**
- * 크롭 모달을 닫고 cropper 인스턴스 정리
+ * 이미지를 삭제하고 초기 상태로 되돌림
+ * @param {Event} event - 클릭 이벤트 (버블링 방지용)
+ * @param {string} imgId - 초기화할 이미지 요소의 ID
  */
+function resetImg(event, imgId) {
+  // 부모 img-box의 클릭 이벤트(파일 선택창 열기)가 실행되지 않도록 차단
+  event.stopPropagation();
+
+  const resultImg = document.getElementById(imgId);
+  const box = resultImg.parentElement;
+  const plusIcon = box.querySelector(".plus-icon, .small-box-label");
+  const delBtn = box.querySelector(".del-btn");
+
+  // 1. 이미지 제거
+  resultImg.src = "";
+  resultImg.style.display = "none";
+  box.classList.remove("has-img");
+
+  // 2. UI 복구 (플러스 아이콘 보이기, 삭제 버튼 숨기기)
+  if (plusIcon) plusIcon.style.display = "block";
+  if (delBtn) delBtn.style.display = "none";
+
+  // 3. 연결된 파일 input 값 비우기
+  const inputId = "file-" + imgId.replace("img-", "");
+  const fileInput = document.getElementById(inputId);
+  if (fileInput) fileInput.value = "";
+}
+
+// ==========================================
+// 모달 닫기
+// ==========================================
 function closeModal() {
   document.getElementById("crop-modal").style.display = "none";
   if (cropper) cropper.destroy();
@@ -83,10 +107,6 @@ function closeModal() {
 // ==========================================
 // 리스트 아이템 추가
 // ==========================================
-/**
- * 특징 리스트에 새로운 항목 추가
- * @param {string} listId - 리스트 컨테이너 요소의 ID
- */
 function addItem(listId) {
   const list = document.getElementById(listId);
   const div = document.createElement("div");
@@ -106,10 +126,6 @@ function addItem(listId) {
 // ==========================================
 // 컬러 피커
 // ==========================================
-/**
- * 컬러 피커를 열어 색상 선택
- * @param {string} id - 컬러 도트 요소의 ID
- */
 function pickColor(id) {
   const colorPicker = document.createElement("input");
   colorPicker.type = "color";
@@ -123,23 +139,18 @@ function pickColor(id) {
 }
 
 // ==========================================
-// 이미지로 저장
+// 이미지로 저장 (PNG Export)
 // ==========================================
-/**
- * 캡처 영역을 PNG 이미지로 저장
- */
 function saveAsImage() {
   const area = document.getElementById("capture-area");
   const title = document.querySelector(".pair-title").innerText;
-  const btns = document.querySelectorAll(".btn-group");
 
-  // 편집 버튼 숨기기
-  btns.forEach((btn) => (btn.style.display = "none"));
+  // 캡처 시 방해되는 모든 버튼 요소 숨기기
+  const allBtns = document.querySelectorAll(".btn-group, .del-btn");
+  allBtns.forEach((btn) => (btn.style.opacity = "0"));
 
-  // 페이지 최상단으로 스크롤
   window.scrollTo(0, 0);
 
-  // 렌더링 완료 대기 후 캡처
   setTimeout(() => {
     html2canvas(area, {
       backgroundColor: "#ffffff",
@@ -152,8 +163,8 @@ function saveAsImage() {
       link.href = canvas.toDataURL();
       link.click();
 
-      // 편집 버튼 다시 표시
-      btns.forEach((btn) => (btn.style.display = "flex"));
+      // 저장 완료 후 버튼 다시 표시
+      allBtns.forEach((btn) => (btn.style.opacity = "1"));
     });
   }, 100);
 }

@@ -5,47 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notion Style Profile Maker</title>
 
-    <!-- 외부 폰트 -->
     <link
       href="https://webfontworld.github.io/gmarket/GmarketSans.css"
       rel="stylesheet"
     />
 
-    <!-- Cropper.js CSS -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
       rel="stylesheet"
     />
 
-    <!-- 메인 스타일시트 -->
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <!-- ========================================
-         상단 네비게이션
-         ======================================== -->
     <div class="top-nav">
       <button class="export-btn" onclick="saveAsImage()">📥 Export PNG</button>
     </div>
 
-    <!-- ========================================
-         캡처 영역
-         ======================================== -->
     <div id="capture-area">
-      <!-- 페어 타이틀 -->
       <div class="pair-title" contenteditable="true">Untitled Pair</div>
 
-      <!-- 카드들을 담는 메인 래퍼 -->
       <div class="main-wrapper">
-        <!-- ========== 의상 카드 A ========== -->
         <div class="nt-card outfit-card">
           <div class="label">Outfit A</div>
-
-          <!-- 메인 의상 이미지 -->
           <div class="img-box outfit-img-box" onclick="triggerFile('file-oa')">
             <span class="plus-icon">+</span>
             <img id="img-oa" alt="Outfit A" />
+            <button class="del-btn" onclick="resetImg(event, 'img-oa')">
+              ×
+            </button>
             <input
               type="file"
               id="file-oa"
@@ -55,7 +44,6 @@
             />
           </div>
 
-          <!-- 표정 & SD 이미지 -->
           <div class="small-box-container">
             <div
               class="img-box small-img-box"
@@ -63,6 +51,9 @@
             >
               <span class="small-box-label">😊</span>
               <img id="img-oa-exp" alt="Expression" />
+              <button class="del-btn" onclick="resetImg(event, 'img-oa-exp')">
+                ×
+              </button>
               <input
                 type="file"
                 id="file-oa-exp"
@@ -77,6 +68,9 @@
             >
               <span class="small-box-label">🐰</span>
               <img id="img-oa-sd" alt="SD" />
+              <button class="del-btn" onclick="resetImg(event, 'img-oa-sd')">
+                ×
+              </button>
               <input
                 type="file"
                 id="file-oa-sd"
@@ -88,12 +82,8 @@
           </div>
         </div>
 
-        <!-- ========== 캐릭터 카드 A ========== -->
         <div class="nt-card char-card">
-          <!-- 캐릭터 이름 -->
           <div class="name-input" contenteditable="true">Character A</div>
-
-          <!-- 키워드 & 신장/체중 -->
           <div class="char-basic-info">
             <div class="keywords-input" contenteditable="true">
               키워드1 / 키워드2 / 키워드3
@@ -102,11 +92,12 @@
               000cm / 00kg
             </div>
           </div>
-
-          <!-- 캐릭터 이미지 -->
           <div class="img-box char-img-box" onclick="triggerFile('file-ca')">
             <span class="plus-icon">+</span>
             <img id="img-ca" alt="Character A" />
+            <button class="del-btn" onclick="resetImg(event, 'img-ca')">
+              ×
+            </button>
             <input
               type="file"
               id="file-ca"
@@ -115,8 +106,6 @@
               onchange="openEditor(this, 'img-ca', 1 / 1)"
             />
           </div>
-
-          <!-- 특징 리스트 -->
           <div id="list-a" class="info-list">
             <div class="info-item">
               <span class="info-text" contenteditable="true">특징 입력</span>
@@ -125,8 +114,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 컬러 팔레트 -->
           <div class="palette">
             <span class="palette-label">Color</span>
             <div
@@ -150,12 +137,8 @@
           </div>
         </div>
 
-        <!-- ========== 캐릭터 카드 B ========== -->
         <div class="nt-card char-card">
-          <!-- 캐릭터 이름 -->
           <div class="name-input" contenteditable="true">Character B</div>
-
-          <!-- 키워드 & 신장/체중 -->
           <div class="char-basic-info">
             <div class="keywords-input" contenteditable="true">
               키워드1 / 키워드2 / 키워드3
@@ -164,11 +147,12 @@
               000cm / 00kg
             </div>
           </div>
-
-          <!-- 캐릭터 이미지 -->
           <div class="img-box char-img-box" onclick="triggerFile('file-cb')">
             <span class="plus-icon">+</span>
             <img id="img-cb" alt="Character B" />
+            <button class="del-btn" onclick="resetImg(event, 'img-cb')">
+              ×
+            </button>
             <input
               type="file"
               id="file-cb"
@@ -177,8 +161,6 @@
               onchange="openEditor(this, 'img-cb', 1 / 1)"
             />
           </div>
-
-          <!-- 특징 리스트 -->
           <div id="list-b" class="info-list">
             <div class="info-item">
               <span class="info-text" contenteditable="true">특징 입력</span>
@@ -187,8 +169,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 컬러 팔레트 -->
           <div class="palette">
             <span class="palette-label">Color</span>
             <div
@@ -212,14 +192,14 @@
           </div>
         </div>
 
-        <!-- ========== 의상 카드 B ========== -->
         <div class="nt-card outfit-card">
           <div class="label">Outfit B</div>
-
-          <!-- 메인 의상 이미지 -->
           <div class="img-box outfit-img-box" onclick="triggerFile('file-ob')">
             <span class="plus-icon">+</span>
             <img id="img-ob" alt="Outfit B" />
+            <button class="del-btn" onclick="resetImg(event, 'img-ob')">
+              ×
+            </button>
             <input
               type="file"
               id="file-ob"
@@ -228,8 +208,6 @@
               onchange="openEditor(this, 'img-ob', 2 / 3)"
             />
           </div>
-
-          <!-- 표정 & SD 이미지 -->
           <div class="small-box-container">
             <div
               class="img-box small-img-box"
@@ -237,6 +215,9 @@
             >
               <span class="small-box-label">😊</span>
               <img id="img-ob-exp" alt="Expression" />
+              <button class="del-btn" onclick="resetImg(event, 'img-ob-exp')">
+                ×
+              </button>
               <input
                 type="file"
                 id="file-ob-exp"
@@ -251,6 +232,9 @@
             >
               <span class="small-box-label">🐰</span>
               <img id="img-ob-sd" alt="SD" />
+              <button class="del-btn" onclick="resetImg(event, 'img-ob-sd')">
+                ×
+              </button>
               <input
                 type="file"
                 id="file-ob-sd"
@@ -264,15 +248,10 @@
       </div>
     </div>
 
-    <!-- ========================================
-         이미지 크롭 모달
-         ======================================== -->
     <div id="crop-modal">
       <div class="modal-content">
         <div class="modal-title">이미지 자르기</div>
-        <div class="crop-area">
-          <img id="crop-target" alt="Crop target" />
-        </div>
+        <div class="crop-area"><img id="crop-target" alt="Crop target" /></div>
         <div class="modal-btns">
           <button class="m-btn" onclick="closeModal()">취소</button>
           <button class="m-btn save" onclick="applyCrop()">적용하기</button>
@@ -280,16 +259,8 @@
       </div>
     </div>
 
-    <!-- ========================================
-         외부 스크립트
-         ======================================== -->
-    <!-- Cropper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-
-    <!-- html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-    <!-- 메인 스크립트 -->
     <script src="script.js"></script>
   </body>
 </html>
