@@ -199,10 +199,12 @@ body {
 }
 .char-basic-info {
   margin-bottom: 15px;
+  font-weight: 700;
   text-align: center;
   line-height: 1.5;
 }
 .keywords-input {
+  font-family: "Nanum Myeongjo", serif;
   font-size: 14px;
   color: var(--nt-sub);
   outline: none;
