@@ -4,17 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notion Style Profile Maker</title>
-
     <link
       href="https://webfontworld.github.io/gmarket/GmarketSans.css"
       rel="stylesheet"
     />
-
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
       rel="stylesheet"
     />
-
     <link rel="stylesheet" href="style.css" />
   </head>
 
@@ -24,7 +21,9 @@
     </div>
 
     <div id="capture-area">
-      <div class="pair-title" contenteditable="true">Untitled Pair</div>
+      <div class="pair-title-container">
+        <div class="pair-title" contenteditable="true">Untitled Pair</div>
+      </div>
 
       <div class="main-wrapper">
         <div class="nt-card outfit-card">
@@ -43,7 +42,6 @@
               onchange="openEditor(this, 'img-oa', 2 / 3)"
             />
           </div>
-
           <div class="small-box-container">
             <div
               class="img-box small-img-box"
@@ -257,6 +255,98 @@
           <button class="m-btn save" onclick="applyCrop()">적용하기</button>
         </div>
       </div>
+    </div>
+
+    <div id="color-popup" class="color-popup" style="display: none">
+      <div class="popup-header">Select Color</div>
+
+      <div class="color-section-label">Default</div>
+      <div class="color-grid">
+        <div
+          class="color-option"
+          style="background: #37352f"
+          onclick="selectColor('#37352f')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #787774"
+          onclick="selectColor('#787774')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #9b9a97"
+          onclick="selectColor('#9b9a97')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #ebeced"
+          onclick="selectColor('#ebeced')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #ffffff; border: 1px solid #ddd"
+          onclick="selectColor('#ffffff')"
+        ></div>
+      </div>
+
+      <div class="color-section-label">Soft & Pastel</div>
+      <div class="color-grid">
+        <div
+          class="color-option"
+          style="background: #ffebec"
+          onclick="selectColor('#ffebec')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #fff5eb"
+          onclick="selectColor('#fff5eb')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #fffbd4"
+          onclick="selectColor('#fffbd4')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #f1f9e3"
+          onclick="selectColor('#f1f9e3')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #e7f3f8"
+          onclick="selectColor('#e7f3f8')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #e03e3e"
+          onclick="selectColor('#e03e3e')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #dfab01"
+          onclick="selectColor('#dfab01')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #0f7b6c"
+          onclick="selectColor('#0f7b6c')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #2383e2"
+          onclick="selectColor('#2383e2')"
+        ></div>
+        <div
+          class="color-option"
+          style="background: #6a459b"
+          onclick="selectColor('#6a459b')"
+        ></div>
+      </div>
+
+      <div class="popup-divider"></div>
+      <button class="custom-picker-btn" onclick="openSystemPicker()">
+        <span class="icon">🎨</span> 사용자 지정 색상
+      </button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>

@@ -1,19 +1,17 @@
 // ==========================================
 // 전역 변수
 // ==========================================
-let cropper = null; // Cropper.js 인스턴스
-let targetId = ""; // 현재 편집 중인 이미지 ID (img 요소의 ID)
+let cropper = null;
+let targetId = "";
+let activeDotId = ""; // 현재 색상을 변경 중인 도트 ID
 
 // ==========================================
-// 파일 선택 트리거
+// 파일 선택 및 이미지 편집 (Cropper)
 // ==========================================
 function triggerFile(id) {
   document.getElementById(id).click();
 }
 
-// ==========================================
-// 이미지 편집 모달 열기
-// ==========================================
 function openEditor(input, imgId, ratio) {
   if (!input.files || !input.files[0]) return;
 
@@ -41,20 +39,17 @@ function openEditor(input, imgId, ratio) {
   input.value = "";
 }
 
-// ==========================================
-// 크롭 적용 (수정됨: UI 업데이트 로직 추가)
-// ==========================================
 function applyCrop() {
+  if (!cropper) return;
+
   const canvas = cropper.getCroppedCanvas();
   const resultImg = document.getElementById(targetId);
   const box = resultImg.parentElement;
 
-  // 이미지 적용 및 표시
   resultImg.src = canvas.toDataURL();
   resultImg.style.display = "block";
   box.classList.add("has-img");
 
-  // 이미지 추가 시 플러스 아이콘/라벨 숨기기 및 삭제 버튼 보이기
   const plusIcon = box.querySelector(".plus-icon, .small-box-label");
   const delBtn = box.querySelector(".del-btn");
 
@@ -64,16 +59,7 @@ function applyCrop() {
   closeModal();
 }
 
-// ==========================================
-// 이미지 초기화 (새로 추가: 삭제 버튼 기능)
-// ==========================================
-/**
- * 이미지를 삭제하고 초기 상태로 되돌림
- * @param {Event} event - 클릭 이벤트 (버블링 방지용)
- * @param {string} imgId - 초기화할 이미지 요소의 ID
- */
 function resetImg(event, imgId) {
-  // 부모 img-box의 클릭 이벤트(파일 선택창 열기)가 실행되지 않도록 차단
   event.stopPropagation();
 
   const resultImg = document.getElementById(imgId);
@@ -81,31 +67,28 @@ function resetImg(event, imgId) {
   const plusIcon = box.querySelector(".plus-icon, .small-box-label");
   const delBtn = box.querySelector(".del-btn");
 
-  // 1. 이미지 제거
   resultImg.src = "";
   resultImg.style.display = "none";
   box.classList.remove("has-img");
 
-  // 2. UI 복구 (플러스 아이콘 보이기, 삭제 버튼 숨기기)
   if (plusIcon) plusIcon.style.display = "block";
   if (delBtn) delBtn.style.display = "none";
 
-  // 3. 연결된 파일 input 값 비우기
   const inputId = "file-" + imgId.replace("img-", "");
   const fileInput = document.getElementById(inputId);
   if (fileInput) fileInput.value = "";
 }
 
-// ==========================================
-// 모달 닫기
-// ==========================================
 function closeModal() {
   document.getElementById("crop-modal").style.display = "none";
-  if (cropper) cropper.destroy();
+  if (cropper) {
+    cropper.destroy();
+    cropper = null;
+  }
 }
 
 // ==========================================
-// 리스트 아이템 추가
+// 리스트 아이템 추가 (개선된 디자인 반영)
 // ==========================================
 function addItem(listId) {
   const list = document.getElementById(listId);
@@ -124,18 +107,66 @@ function addItem(listId) {
 }
 
 // ==========================================
-// 컬러 피커
+// 커스텀 컬러 피커 로직 (리디자인)
 // ==========================================
 function pickColor(id) {
-  const colorPicker = document.createElement("input");
-  colorPicker.type = "color";
-  colorPicker.value = document.getElementById(id).style.background || "#000000";
+  const dot = document.getElementById(id);
+  const popup = document.getElementById("color-popup");
+  activeDotId = id;
 
-  colorPicker.oninput = (e) => {
-    document.getElementById(id).style.background = e.target.value;
+  // 팝업 위치 설정 (클릭한 도트 근처)
+  const rect = dot.getBoundingClientRect();
+  popup.style.display = "block";
+  popup.style.top = window.scrollY + rect.bottom + 10 + "px";
+  popup.style.left = window.scrollX + rect.left - 70 + "px";
+
+  // 팝업 외부 클릭 시 닫기
+  const closePopup = (e) => {
+    if (!popup.contains(e.target) && e.target !== dot) {
+      popup.style.display = "none";
+      document.removeEventListener("mousedown", closePopup);
+    }
   };
+  document.addEventListener("mousedown", closePopup);
+}
 
-  colorPicker.click();
+// 팝업 내 사전 정의된 색상 선택
+function selectColor(color) {
+  if (activeDotId) {
+    const targetDot = document.getElementById(activeDotId);
+    targetDot.style.background = color;
+    document.getElementById("color-popup").style.display = "none";
+  }
+}
+
+// 직접 선택 버튼 (시스템 컬러 피커 호출)
+function openSystemPicker() {
+  const colorInput = document.createElement("input");
+  colorInput.type = "color";
+  const currentDot = document.getElementById(activeDotId);
+
+  // 현재 색상을 피커 기본값으로 (RGB -> HEX 변환)
+  colorInput.value = rgbToHex(currentDot.style.background) || "#000000";
+
+  colorInput.oninput = (e) => {
+    selectColor(e.target.value);
+  };
+  colorInput.click();
+}
+
+// RGB(0,0,0) 스타일 문자열을 HEX(#000000)로 변환
+function rgbToHex(rgb) {
+  if (!rgb || !rgb.startsWith("rgb")) return rgb;
+  const vals = rgb.match(/\d+/g);
+  return (
+    "#" +
+    vals
+      .map((x) => {
+        const hex = parseInt(x).toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
+      })
+      .join("")
+  );
 }
 
 // ==========================================
@@ -143,10 +174,13 @@ function pickColor(id) {
 // ==========================================
 function saveAsImage() {
   const area = document.getElementById("capture-area");
-  const title = document.querySelector(".pair-title").innerText;
+  const titleElement = document.querySelector(".pair-title");
+  const title = titleElement ? titleElement.innerText : "Untitled";
 
-  // 캡처 시 방해되는 모든 버튼 요소 숨기기
-  const allBtns = document.querySelectorAll(".btn-group, .del-btn");
+  // 캡처 시 방해되는 UI 요소 숨기기
+  const allBtns = document.querySelectorAll(
+    ".btn-group, .del-btn, .export-btn, .color-popup",
+  );
   allBtns.forEach((btn) => (btn.style.opacity = "0"));
 
   window.scrollTo(0, 0);
@@ -154,17 +188,18 @@ function saveAsImage() {
   setTimeout(() => {
     html2canvas(area, {
       backgroundColor: "#ffffff",
-      scale: 2,
+      scale: 3,
       useCORS: true,
       allowTaint: true,
+      logging: false,
     }).then((canvas) => {
       const link = document.createElement("a");
       link.download = `${title}_profile.png`;
-      link.href = canvas.toDataURL();
+      link.href = canvas.toDataURL("image/png");
       link.click();
 
-      // 저장 완료 후 버튼 다시 표시
+      // 버튼 다시 표시
       allBtns.forEach((btn) => (btn.style.opacity = "1"));
     });
-  }, 100);
+  }, 200);
 }

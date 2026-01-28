@@ -1,135 +1,151 @@
 /* ========================================
-   CSS 변수 정의 (기존 유지)
+   CSS 변수 정의
    ======================================== */
 :root {
   --nt-bg: #fafaf9;
   --nt-card-bg: #ffffff;
-  --nt-text: #1f1f1f;
+  --nt-text: #37352f;
   --nt-sub: #6b6b6b;
-  --nt-border: #000000;
-  --nt-hover: rgba(0, 0, 0, 0.04);
-  --nt-accent: #2563eb;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --nt-border: #e9e9e7;
+  --nt-blue: #2383e2;
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --nt-hover: rgba(55, 53, 47, 0.08);
 }
-
-/* ... (기본 스타일 리셋 ~ 카드 공통 스타일까지 기존과 동일) ... */
 
 * {
   box-sizing: border-box;
 }
+
 body {
   background: #ffffff;
   color: var(--nt-text);
   font-family: "GmarketSans", sans-serif;
   margin: 0;
-  padding: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-}
-
-.top-nav {
-  padding: 24px 24px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  max-width: 1400px;
-}
-.export-btn {
-  background: var(--nt-text);
-  border: 1px solid var(--nt-border);
-  color: white;
-  padding: 10px 24px;
-  border-radius: 2px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: inherit;
-  transition: all 0.2s ease;
-}
-.export-btn:hover {
-  background: #000000;
-  transform: translateY(-1px);
-}
-
-#capture-area {
-  padding: 35px 26px 35px;
-  background: white;
-  margin-bottom: 48px;
-  width: 100%;
-  max-width: 1400px;
-  display: flex;
-  flex-direction: column;
-}
-.main-wrapper {
-  display: flex;
-  gap: 15px;
-  align-items: flex-start;
-  justify-content: center;
-  flex-wrap: nowrap;
-}
-.nt-card {
-  border: 1px solid var(--nt-border);
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  background: var(--nt-card-bg);
 }
 
 /* ========================================
-   이미지 박스 공통 및 삭제 버튼 (핵심 수정 부분)
+   상단 내보내기 영역 및 타이틀
    ======================================== */
-.img-box {
-  position: relative; /* 삭제 버튼의 기준점 */
-  background: #f5f5f5;
+.top-nav {
+  padding: 24px 24px 0px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.export-btn {
+  background: var(--nt-text);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.export-btn:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+/* 캡처 영역 (상단 패딩 대폭 축소) */
+#capture-area {
+  padding: 10px 40px 60px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pair-title-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
+  margin-bottom: 40px;
+}
+
+.pair-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  outline: none;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ========================================
+   카드 공통 레이아웃
+   ======================================== */
+.main-wrapper {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.nt-card {
   border: 1px solid var(--nt-border);
+  padding: 24px;
+  background: var(--nt-card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 아웃핏/캐릭터 라벨 (정중앙 정렬) */
+.label {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nt-text);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-align: center;
+  display: block;
+}
+
+/* 이미지 박스 디자인 */
+.img-box {
+  position: relative;
+  background: #f7f7f5;
+  border: 1px solid #ededeb;
+  border-radius: 8px;
   overflow: hidden;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .img-box:hover {
-  background: #ebebeb;
+  background: #efefed;
 }
 
-/* 업로드된 이미지 기본 스타일 */
 .img-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: none; /* JS에서 block으로 변경됨 */
+  display: none;
   z-index: 2;
 }
 
-/* 플러스 아이콘 및 이모지 라벨 */
 .plus-icon,
 .small-box-label {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 1;
+  font-size: 20px;
+  color: #acaba9;
 }
 
-.plus-icon {
-  font-size: 32px;
-  color: #cccccc;
-  font-weight: 300;
-}
-.small-box-label {
-  font-size: 31px;
-  color: var(--nt-sub);
-}
-
-/* 삭제(X) 버튼 스타일 */
 .del-btn {
   position: absolute;
   top: 8px;
@@ -140,137 +156,306 @@ body {
   color: white;
   border: none;
   border-radius: 50%;
-  cursor: pointer;
-  display: none; /* JS에서 flex로 변경됨 */
+  display: none;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  line-height: 1;
   z-index: 10;
-  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-.del-btn:hover {
-  background: #ff4d4d; /* 삭제 강조 */
-  transform: scale(1.1);
-}
-
-/* 의상/캐릭터 카드별 높이 지정 유지 */
+/* 의상 및 캐릭터 카드 사이즈 */
 .outfit-card {
-  width: 264px;
+  width: 270px;
 }
 .outfit-img-box {
-  height: 374px;
+  height: 380px;
   margin-bottom: 12px;
 }
 .small-box-container {
   display: flex;
   gap: 10px;
-  margin-top: 12px;
 }
 .small-img-box {
   flex: 1;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1/1;
 }
 
 .char-card {
-  width: 308px;
+  width: 320px;
 }
 .char-img-box {
   width: 100%;
-  height: 286px;
-  margin-bottom: 12px;
+  height: 290px;
+  margin-bottom: 15px;
 }
 
-/* ... (리스트 항목, 팔레트, 모달 등 하단 스타일 기존 유지) ... */
-
+/* 텍스트 입력 영역 */
 .name-input {
-  font-size: 1.76rem;
+  font-size: 1.8rem;
   font-weight: 700;
   text-align: center;
   outline: none;
-  border-bottom: 2px solid transparent;
+  margin-bottom: 10px;
 }
 .char-basic-info {
-  margin-bottom: 12px;
+  margin-bottom: 15px;
   text-align: center;
+  line-height: 1.5;
 }
+.keywords-input {
+  font-size: 14px;
+  color: var(--nt-sub);
+  outline: none;
+}
+.body-info-input {
+  font-size: 13px;
+  color: var(--nt-sub);
+  outline: none;
+}
+
+/* ========================================
+   특징 리스트 및 버튼 디자인
+   ======================================== */
 .info-list {
   flex-grow: 1;
-  margin-bottom: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-height: 88px;
+  margin-bottom: 15px;
+  min-height: 90px;
 }
+
 .info-item {
   display: flex;
   align-items: center;
-  padding: 9px 11px;
-  font-size: 16.5px;
-  position: relative;
+  padding: 6px 8px;
+  font-size: 15px;
+  transition: background 0.2s ease;
+  border-radius: 6px;
 }
+
+.info-item:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
 .info-item::before {
   content: "•";
   margin-right: 8px;
-  opacity: 0.4;
+  color: #ccc;
+  font-size: 18px;
 }
+
 .info-text {
   flex-grow: 1;
   outline: none;
-  color: #6b6b6b;
+  color: #444;
 }
 
-.palette {
+.btn-group {
   display: flex;
-  gap: 9px;
-  padding: 11px 13px;
-  background: #f5f5f5;
-  border: 1px solid var(--nt-border);
-  justify-content: center;
+  opacity: 0;
+  margin-left: 10px;
+  gap: 4px;
+  transition: opacity 0.2s ease;
 }
-.color-dot {
+
+.info-item:hover .btn-group,
+.info-item:focus-within .btn-group {
+  opacity: 1;
+}
+
+.list-btn {
+  background: #f4f4f2;
+  border: none;
+  cursor: pointer;
   width: 22px;
   height: 22px;
-  border: 1px solid var(--nt-border);
-  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #91918e;
+  transition: all 0.2s ease;
 }
 
-/* 모달 및 반응형 (기존 유지) */
+.list-btn:first-child:hover {
+  background: #e1f0ff;
+  color: var(--nt-blue);
+}
+.list-btn:last-child:hover {
+  background: #ffe2e2;
+  color: #eb5757;
+}
+
+/* ========================================
+   커스텀 컬러 팔레트 팝업
+   ======================================== */
+.palette {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: #fbfbfa;
+  border-radius: 8px;
+  justify-content: center;
+  margin-top: auto;
+  border: 1px solid var(--nt-border);
+}
+
+.color-dot {
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-dot:hover {
+  transform: scale(1.1);
+}
+
+.color-popup {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  z-index: 1000;
+  width: 210px;
+  animation: popup-fade 0.2s ease-out;
+}
+
+@keyframes popup-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.popup-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9b9a97;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.color-section-label {
+  font-size: 10px;
+  color: #acaba9;
+  margin: 8px 0 6px;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.color-option {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.15s ease;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.popup-divider {
+  height: 1px;
+  background: #f1f1ef;
+  margin: 12px 0;
+}
+
+.custom-picker-btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid #ededeb;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #37352f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.custom-picker-btn:hover {
+  background: #f7f7f5;
+}
+
+.custom-picker-btn .icon {
+  font-size: 14px;
+}
+
+/* ========================================
+   모달 디자인
+   ======================================== */
 #crop-modal {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
   z-index: 2000;
   justify-content: center;
   align-items: center;
 }
+
 .modal-content {
   background: white;
-  padding: 32px;
-  border: 1px solid var(--nt-border);
+  padding: 25px;
+  border-radius: 12px;
   width: 600px;
-  max-width: 90vw;
-}
-.crop-area {
-  height: 450px;
-  background: #f5f5f5;
-  margin-bottom: 24px;
-  border: 1px solid var(--nt-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-@media (max-width: 768px) {
-  .main-wrapper {
-    flex-direction: column;
-    align-items: center;
-  }
-  .outfit-card,
-  .char-card {
-    width: 100%;
-    max-width: 400px;
-  }
+.modal-title {
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.crop-area {
+  height: 400px;
+  background: #f7f7f5;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.modal-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.m-btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: 1px solid var(--nt-border);
+  cursor: pointer;
+  font-weight: 600;
+  background: white;
+}
+
+.m-btn.save {
+  background: var(--nt-blue);
+  color: white;
+  border: none;
 }
