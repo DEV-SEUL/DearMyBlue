@@ -203,3 +203,18 @@ function saveAsImage() {
     });
   }, 200);
 }
+
+// 모든 contenteditable 요소에 대해 붙여넣기 시 서식 제거
+document.addEventListener("paste", function (e) {
+  // 편집 가능한 영역(contenteditable)에서 발생한 이벤트인지 확인
+  const target = e.target;
+  if (target.isContentEditable) {
+    e.preventDefault(); // 기본 붙여넣기 동작 중단
+
+    // 클립보드에서 텍스트 데이터만 가져오기
+    const text = (e.originalEvent || e).clipboardData.getData("text/plain");
+
+    // 현재 커서 위치에 텍스트 삽입
+    document.execCommand("insertText", false, text);
+  }
+});
